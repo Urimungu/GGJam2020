@@ -47,6 +47,12 @@ public class CharacterController : MonoBehaviour
     }
 
 
+    public void SetState(int state)
+    {
+        State = state;
+
+    }
+
     private void Update() {
         //If the player is unable to move, don't let him move
         if (canMove) {
