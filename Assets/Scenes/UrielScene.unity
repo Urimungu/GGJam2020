@@ -283,12 +283,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpeed: 5
   jumpForce: 10
+  doubleJumpForce: 5
+  rayCastLength: 0.4
   state: 0
   TopBounds:
   - {fileID: 213096582}
   - {fileID: 195026407}
   - {fileID: 459315656}
   - {fileID: 39210466}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 311
 --- !u!65 &654535201
 BoxCollider:
   m_ObjectHideFlags: 0
