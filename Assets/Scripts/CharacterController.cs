@@ -26,6 +26,8 @@ public class CharacterController : MonoBehaviour
     private bool canDoubleJump = true;
     private bool topSection = true;
     private bool isRunning = false;
+    private bool isWalking = false;
+    private bool isInAir = false;
     private bool inRange;
     private bool onBottom;
 
@@ -37,14 +39,11 @@ public class CharacterController : MonoBehaviour
         GameManager.Manager.Player = gameObject;
         rocketFire = transform.GetChild(1).GetComponent<ParticleSystem>();
         anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
-
     }
-
 
     public void SetState(int state)
     {
         State = state;
-
     }
 
     private void Update() {
@@ -58,10 +57,19 @@ public class CharacterController : MonoBehaviour
         if(inRange && Input.GetKeyDown(KeyCode.W))
             SwitchDoor();
         anim.SetFloat("Speed", Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude));
-        anim.SetBool("Grounded", CheckGrounded());
+        UpdateGroundedState();
         if(Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude) > 0.1f)
             transform.GetChild(0).rotation =
             Quaternion.LookRotation(new Vector3(rb.velocity.x, 0, rb.velocity.z), Vector3.up);
+    }
+
+    private void UpdateGroundedState()
+    {
+        var isGrounded = CheckGrounded();
+        anim.SetBool("Grounded", isGrounded);
+        if (!isGrounded)
+            isWalking = false;
+        isInAir = !isGrounded;
     }
 
     //Moves the Player
@@ -69,7 +77,7 @@ public class CharacterController : MonoBehaviour
         //Moves the player in the Direction that he is compared to the Robot
         Vector3 newVel = Direction() * playerSpeed * hor;
         rb.velocity = new Vector3(newVel.x, rb.velocity.y -gravity , newVel.z);
-
+        
         //Lets the player jump
         Jump();
 
@@ -85,6 +93,7 @@ public class CharacterController : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, doubleJumpForce, rb.velocity.z);
             rocketFire.Play();
             canDoubleJump = false;
+            Message.Publish(new PlayerDoubleJumped());
         }
         //Initial Jump Condition
         if (Input.GetKeyDown("space") && CheckGrounded())
@@ -92,6 +101,7 @@ public class CharacterController : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             canDoubleJump = true;
             rocketFire.Stop();
+            Message.Publish(new PlayerJumped());
         }
     }
 
