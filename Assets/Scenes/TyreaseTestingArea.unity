@@ -1483,7 +1483,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Time:
@@ -2151,6 +2151,7 @@ GameObject:
   - component: {fileID: 1179805148}
   - component: {fileID: 1179805147}
   - component: {fileID: 1179805149}
+  - component: {fileID: 1179805150}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2172,6 +2173,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainCam: {fileID: 0}
   Player: {fileID: 0}
+  TopDoor: {fileID: 0}
+  BottomDoor: {fileID: 0}
+  TopBounds: []
+  BottomBounds: []
 --- !u!4 &1179805148
 Transform:
   m_ObjectHideFlags: 0
@@ -2200,7 +2205,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TMP_AREA: {fileID: 1951353902}
   TMP_ALERT: {fileID: 2049542651}
+  T_SCORE: {fileID: 660413154}
+  T_TIMER: {fileID: 831523517}
+  T_HIGHSCORE: {fileID: 590213746}
   S_PROGRESSIONBAR: {fileID: 1879044789}
+--- !u!114 &1179805150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179805146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07c9935baba04204b9fba38ad4278db7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1216372415
 GameObject:
   m_ObjectHideFlags: 0
