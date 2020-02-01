@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     //Variables
     private bool Started = false;
     private bool SinglePlayer = true;
+    private bool isRunning;
 
     //Navigation
     public Transform TopDoor, BottomDoor;
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
             Started = true;
             SpawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
             GatherNavigation();
-            Respawn();
+            Spawn();
         }
 
     }
@@ -74,8 +75,30 @@ public class GameManager : MonoBehaviour
         MainCam.transform.GetComponent<CameraController>().enabled = true;
         MainCam.transform.GetComponent<CameraController>().ChangeDir();
     }
+
+    public void KillPlayer() {
+        MainCam.GetComponent<CameraController>().enabled = false;
+        Player.SetActive(false);
+        Player.transform.position = SpawnPoint.transform.position;
+        if(!isRunning) {
+            isRunning = true;
+            StartCoroutine(DeathRespawn());
+        }
+    }
+
+    IEnumerator DeathRespawn()
+    {
+        yield return new WaitForSeconds(1);
+        MainCam.GetComponent<CameraController>().enabled = true;
+        Player.SetActive(true);
+        Player.GetComponent<CharacterController>().SetState(0);
+        MainCam.GetComponent<CameraController>().ChangeDir();
+
+        isRunning = false;
+    }
+
     //The Player is Respawned
-    private void Respawn() {
+    private void Spawn() {
         Player.transform.position = SpawnPoint.transform.position;
         Player.SetActive(true);
     }
