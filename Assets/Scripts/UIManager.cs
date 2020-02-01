@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 using UnityEngine.XR.WSA.WebCam;
 
 public class UIManager : MonoBehaviour
@@ -14,6 +14,9 @@ public class UIManager : MonoBehaviour
     [Header("UI Assets")]
     [SerializeField] private TextMeshProUGUI TMP_AREA;
     [SerializeField] private TextMeshProUGUI TMP_ALERT;
+    [SerializeField] private Text T_SCORE;
+    [SerializeField] private Text T_TIMER;
+    [SerializeField] private Text T_HIGHSCORE;
     [SerializeField] private Slider S_PROGRESSIONBAR;
 
 
@@ -46,6 +49,26 @@ public class UIManager : MonoBehaviour
     public void SetAlertText(string _value = "")
     {
         TMP_ALERT.text = _value;
+    }
+
+    public void SetScoreText(string _value)
+    {
+        T_SCORE.text = _value;
+    }
+
+    public void SetTimerText(string _value)
+    {
+        T_TIMER.text = "TIMER:\n" + _value;
+    }
+
+    public void SetTimerText(float _minutes, float _seconds)
+    {
+        T_TIMER.text = "TIMER:\n" + _minutes + ":" + _seconds.ToString("00.00", CultureInfo.InvariantCulture);
+    }
+
+    public void SetHighScoreText(string _value)
+    {
+        T_HIGHSCORE.text = _value;
     }
     #endregion
 

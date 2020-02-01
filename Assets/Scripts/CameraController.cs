@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private Transform Player;
+    public Transform Player;
     private bool CanMove = true;
     public Vector2 offset;      //(offset, height)
     public Vector3 Offset;
     private int oldInt;
 
     void Start() {
+        //Sets the Main Camera on load
+        GameManager.Manager.MainCam = transform.GetChild(0).GetComponent<Camera>().gameObject;
+
         //Makes sure the Player is not set to null
-        if (GameManager.Manager != null && GameManager.Manager.Player != null)
+        if(GameManager.Manager != null && GameManager.Manager.Player != null)
             Player = GameManager.Manager.Player.transform;
         else {
-            Debug.LogError("Cannot Find the Player");
             GetComponent<CameraController>().enabled = false;
             return;
         }
         ChangeDir();
-        //Sets the Main Camera on load
-        GameManager.Manager.MainCam = transform.GetChild(0).GetComponent<Camera>();
     }
 
     void FixedUpdate() {
@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
     }
 
     //Changes the Camera Offset if the Player Offset Changes
-    private void ChangeDir() {
+    public void ChangeDir() {
         switch (Player.GetComponent<CharacterController>().GetState()) {
             case 0: //Front
                 Offset = new Vector3(0, offset.y, -offset.x);
