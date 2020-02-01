@@ -16,14 +16,11 @@ public class CharacterController : MonoBehaviour
     private Rigidbody rb;
     private bool canMove = true;
     private int State ;         //Needs to Start at -1 so that it sets the bounds in game
-<<<<<<< Updated upstream
+
     public List<Vector3> Bounds = new List<Vector3>();
     public ParticleSystem rocketFire;
     private Animator anim;
-=======
-    public List<GameObject> Bounds = new List<GameObject>();
-    private ParticleSystem rocketFire;
->>>>>>> Stashed changes
+
 
     //Variables
     private bool canDoubleJump = true;
@@ -38,12 +35,9 @@ public class CharacterController : MonoBehaviour
     void Start(){
         rb = GetComponent<Rigidbody>();
         GameManager.Manager.Player = gameObject;
-<<<<<<< Updated upstream
         rocketFire = transform.GetChild(1).GetComponent<ParticleSystem>();
         anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
-=======
-        rocketFire = GetComponentInChildren<ParticleSystem>();
->>>>>>> Stashed changes
+
     }
 
 
