@@ -152,7 +152,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3995addfa414df4ebff1f1f84c03e33, type: 3}
   - {fileID: 8300000, guid: 69c392aaaa6ecc14eb2e1f0f4868a9d6, type: 3}
   - {fileID: 8300000, guid: 811793a3710b40043b67668fbb94d85a, type: 3}
-  timeBetweenSteps: 0.3
+  timeBetweenSteps: 0.5
   startWalkingOnAwake: 0
 --- !u!114 &6778056363228325961
 MonoBehaviour:
