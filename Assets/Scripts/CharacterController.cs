@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class CharacterController : MonoBehaviour
@@ -15,8 +16,9 @@ public class CharacterController : MonoBehaviour
     private Rigidbody rb;
     private bool canMove = true;
     private int State ;         //Needs to Start at -1 so that it sets the bounds in game
-    public List<GameObject> Bounds = new List<GameObject>();
+    public List<Vector3> Bounds = new List<Vector3>();
     public ParticleSystem rocketFire;
+    private Animator anim;
 
     //Variables
     private bool canDoubleJump = true;
@@ -31,7 +33,8 @@ public class CharacterController : MonoBehaviour
     void Start(){
         rb = GetComponent<Rigidbody>();
         GameManager.Manager.Player = gameObject;
-        rocketFire = GetComponent<ParticleSystem>();
+        rocketFire = transform.GetChild(1).GetComponent<ParticleSystem>();
+        anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
     }
 
 
@@ -45,6 +48,11 @@ public class CharacterController : MonoBehaviour
         //When the player gets in range and they press up they Travel across the map
         if(inRange && Input.GetKeyDown(KeyCode.W))
             SwitchDoor();
+        anim.SetFloat("Speed", Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude));
+        anim.SetBool("Grounded", CheckGrounded());
+        if(Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude) > 0.1f)
+            transform.GetChild(0).rotation =
+            Quaternion.LookRotation(new Vector3(rb.velocity.x, 0, rb.velocity.z), Vector3.up);
     }
 
     //Moves the Player
@@ -87,40 +95,33 @@ public class CharacterController : MonoBehaviour
     //Turns the player to the direction that he is on the robot
     void CheckSwitch(float hor){
         //Don't switch if the player isn't on a plate form
-        if (!CheckGrounded() || Bounds.Count == 0) {
-            if(Bounds.Count == 0)
-            for (int i = 0; i < 4; i++)
-                {
-                    GameObject SomethingIdk = new GameObject();
-                    SomethingIdk.transform.position = GameManager.Manager.TopBounds[i].transform.position;
-                    Bounds.Add(SomethingIdk);
-                }
+        if (!CheckGrounded()) 
             return;
-        }
+        
         //Checks to see what direction the player is on
         switch (State) {
             case 0: //Front
-                if (transform.position.x > Bounds[1].transform.position.x && hor > 0)
+                if (transform.position.x > Bounds[1].x && hor > 0)
                     State = 1;
-                if (transform.position.x < Bounds[0].transform.position.x && hor < 0)
+                if (transform.position.x < Bounds[0].x && hor < 0)
                     State = 3;
                 break;
             case 1: //Right
-                if (transform.position.z > Bounds[2].transform.position.z && hor > 0)
+                if (transform.position.z > Bounds[2].z && hor > 0)
                     State = 2;
-                if (transform.position.z < Bounds[1].transform.position.z && hor < 0)
+                if (transform.position.z < Bounds[1].z && hor < 0)
                     State = 0;
                 break;
             case 2: //Back
-                if (transform.position.x < Bounds[3].transform.position.x && hor > 0)
+                if (transform.position.x < Bounds[3].x && hor > 0)
                     State = 3;
-                if (transform.position.x > Bounds[2].transform.position.x && hor < 0)
+                if (transform.position.x > Bounds[2].x && hor < 0)
                     State = 1;
                 break;
             case 3: //Left
-                if (transform.position.z < Bounds[0].transform.position.z && hor > 0)
+                if (transform.position.z < Bounds[0].z && hor > 0)
                     State = 0;
-                if (transform.position.z > Bounds[3].transform.position.z && hor < 0)
+                if (transform.position.z > Bounds[3].z && hor < 0)
                     State = 2;
                 break;
         }
@@ -145,18 +146,16 @@ public class CharacterController : MonoBehaviour
         //Goes to the Bottom
         if(!onBottom) {
             transform.position = GameManager.Manager.BottomDoor.position;
-            Bounds.Clear();
             for(int i = 0; i < 4; i++){
-                Bounds[i].transform.position = GameManager.Manager.BottomBounds[i].transform.position;
+                Bounds[i] = GameManager.Manager.BottomBounds[i].transform.position;
             }
             onBottom = true;
             print("Made into Bottom");
         }else {
             //Goes to the Top
             transform.position = GameManager.Manager.TopDoor.position;
-            Bounds.Clear();
             for (int i = 0; i < 4; i++) {
-                Bounds[i].transform.position = GameManager.Manager.TopBounds[i].transform.position;
+                Bounds[i] = GameManager.Manager.TopBounds[i].transform.position;
             }
             onBottom = false;
             print("Made into Top");
