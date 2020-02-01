@@ -136,7 +136,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39210466}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.928, y: 0, z: 4.421}
+  m_LocalPosition: {x: -5.294, y: 0, z: 4.75}
   m_LocalScale: {x: 0.5237, y: 1, z: 0.44204}
   m_Children: []
   m_Father: {fileID: 1383207313}
@@ -166,7 +166,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195026407}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.651, y: 0, z: -0.242}
+  m_LocalPosition: {x: 0.43, y: 0, z: -0.37}
   m_LocalScale: {x: 0.011896581, y: 0.8929591, z: 0.010041559}
   m_Children: []
   m_Father: {fileID: 1383207313}
@@ -196,7 +196,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 213096582}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.371, y: 0, z: 0}
+  m_LocalPosition: {x: -5.294, y: 0, z: -0.37}
   m_LocalScale: {x: 0.5237, y: 1, z: 0.44204}
   m_Children: []
   m_Father: {fileID: 1383207313}
@@ -226,7 +226,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 459315656}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.022, y: 0, z: 4.371}
+  m_LocalPosition: {x: 0.42999995, y: 0, z: 4.75}
   m_LocalScale: {x: 0.5237, y: 1, z: 0.44204}
   m_Children: []
   m_Father: {fileID: 1383207313}
@@ -246,9 +246,9 @@ GameObject:
   - component: {fileID: 654535201}
   - component: {fileID: 654535200}
   - component: {fileID: 654535199}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -282,13 +282,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 5
-  jumpForce: 10
+  jumpForce: 5
+  doubleJumpForce: 2
+  rayCastLength: 0.4
   state: 0
   TopBounds:
   - {fileID: 213096582}
   - {fileID: 195026407}
   - {fileID: 459315656}
   - {fileID: 39210466}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 311
 --- !u!65 &654535201
 BoxCollider:
   m_ObjectHideFlags: 0

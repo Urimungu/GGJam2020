@@ -7,6 +7,8 @@ public class CharacterController : MonoBehaviour
 
     [SerializeField] private float playerSpeed = 5;
     [SerializeField] private float jumpForce = 10;
+    [SerializeField] private float doubleJumpForce =5;
+    [SerializeField] private float rayCastLength;
     //private enum monsterSide {front, left, right, back} //states for decided which direction player is moving based on which side on the monster
     public int state = 0;
 
@@ -14,9 +16,12 @@ public class CharacterController : MonoBehaviour
     private bool canMove = true;
 
     //Directions
+    private bool canDoubleJump = true;
     private bool topSection = true;
     public GameObject[] TopBounds;
     private bool isRunning = false;
+
+    public LayerMask layerMask;
 
     void Start(){
         rb = GetComponent<Rigidbody>();
@@ -37,14 +42,37 @@ public class CharacterController : MonoBehaviour
     private void Movement(float hor, float ver){
         Vector3 newVel = Direction() * playerSpeed * hor;
         rb.velocity = new Vector3(newVel.x, rb.velocity.y, newVel.z);
-        //Jump
-        if (Input.GetKeyDown("space")){
-            rb.velocity = new Vector3(rb.velocity.x, 200, rb.velocity.z);
-        }
+
+        Jump();
+
         CheckSwitch(hor);
     }
 
+    private void Jump() {
+        //Jump
+        print(CheckGrounded());
+        if (Input.GetKeyDown("space") && !CheckGrounded() && canDoubleJump)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            canDoubleJump = false;
+        }
+        if (Input.GetKeyDown("space") && CheckGrounded())
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            canDoubleJump = true;
+        }
+    }
+
+    private bool CheckGrounded() {
+        // use for seeing raycast Debug.DrawRay(physicsCenter, Vector3.down * rayCastLength, Color.red);
+        Vector3 physicsCenter = transform.position + GetComponent<BoxCollider>().center;
+        Debug.DrawRay(physicsCenter, Vector3.down * rayCastLength, Color.red);
+        return Physics.Raycast(physicsCenter, Vector3.down, rayCastLength, layerMask);
+    }
+
     void CheckSwitch(float hor){
+        if (!CheckGrounded())
+            return;
         switch (state)
         {
             case 0: //Front
