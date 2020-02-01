@@ -8,13 +8,15 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private float playerSpeed = 5;
     [SerializeField] private float jumpForce = 10;
     [SerializeField] private float doubleJumpForce =5;
+    [SerializeField] private float gravity = 1;
     [SerializeField] private float rayCastLength;
 
     //References
     private Rigidbody rb;
     private bool canMove = true;
     private int State ;         //Needs to Start at -1 so that it sets the bounds in game
-    public GameObject[] Bounds;
+    public List<GameObject> Bounds = new List<GameObject>();
+    public ParticleSystem rocketFire;
 
     //Variables
     private bool canDoubleJump = true;
@@ -29,6 +31,7 @@ public class CharacterController : MonoBehaviour
     void Start(){
         rb = GetComponent<Rigidbody>();
         GameManager.Manager.Player = gameObject;
+        rocketFire = GetComponent<ParticleSystem>();
     }
 
 
@@ -48,7 +51,7 @@ public class CharacterController : MonoBehaviour
     private void Movement(float hor, float ver){
         //Moves the player in the Direction that he is compared to the Robot
         Vector3 newVel = Direction() * playerSpeed * hor;
-        rb.velocity = new Vector3(newVel.x, rb.velocity.y, newVel.z);
+        rb.velocity = new Vector3(newVel.x, rb.velocity.y -gravity , newVel.z);
 
         //Lets the player jump
         Jump();
@@ -62,7 +65,8 @@ public class CharacterController : MonoBehaviour
         //Double Jumps if the player is able to
         if (Input.GetKeyDown("space") && canDoubleJump && !CheckGrounded())
         {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            rb.velocity = new Vector3(rb.velocity.x, doubleJumpForce, rb.velocity.z);
+            rocketFire.Play();
             canDoubleJump = false;
         }
         //Initial Jump Condition
@@ -70,6 +74,7 @@ public class CharacterController : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             canDoubleJump = true;
+            rocketFire.Stop();
         }
     }
 
@@ -82,8 +87,14 @@ public class CharacterController : MonoBehaviour
     //Turns the player to the direction that he is on the robot
     void CheckSwitch(float hor){
         //Don't switch if the player isn't on a plate form
-        if (!CheckGrounded() || Bounds.Length == 0) {
-            Bounds = GameManager.Manager.TopBounds;
+        if (!CheckGrounded() || Bounds.Count == 0) {
+            if(Bounds.Count == 0)
+            for (int i = 0; i < 4; i++)
+                {
+                    GameObject SomethingIdk = new GameObject();
+                    SomethingIdk.transform.position = GameManager.Manager.TopBounds[i].transform.position;
+                    Bounds.Add(SomethingIdk);
+                }
             return;
         }
         //Checks to see what direction the player is on
@@ -134,15 +145,19 @@ public class CharacterController : MonoBehaviour
         //Goes to the Bottom
         if(!onBottom) {
             transform.position = GameManager.Manager.BottomDoor.position;
-            for (int i = 0; i < 4; i++)
-                Bounds[i] = GameManager.Manager.BottomBounds[i];
+            Bounds.Clear();
+            for(int i = 0; i < 4; i++){
+                Bounds[i].transform.position = GameManager.Manager.BottomBounds[i].transform.position;
+            }
             onBottom = true;
             print("Made into Bottom");
         }else {
             //Goes to the Top
             transform.position = GameManager.Manager.TopDoor.position;
-            for(int i = 0; i < 4; i++)
-                Bounds[i] = GameManager.Manager.TopBounds[i];
+            Bounds.Clear();
+            for (int i = 0; i < 4; i++) {
+                Bounds[i].transform.position = GameManager.Manager.TopBounds[i].transform.position;
+            }
             onBottom = false;
             print("Made into Top");
 
