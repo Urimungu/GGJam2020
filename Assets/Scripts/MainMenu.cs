@@ -10,7 +10,7 @@ public class MainMenu : MonoBehaviour
 {
     //References
     public Text Options;
-
+    
     //Variables
     private int State = 0;
     private bool canMove = true;
@@ -31,8 +31,10 @@ public class MainMenu : MonoBehaviour
     //Makes sure the state doesn't fall out of bounds
     private int BoundsTracker(bool add) {
         int newState = State + (add ? 1 : -1);
-        return newState > 3 ? 0 : newState < 0 ? 3 : newState;
-
+        var adjustedNewState = newState > 3 ? 0 : newState < 0 ? 3 : newState;
+        if (adjustedNewState != State)
+            Message.Publish(new UiSelectionChanged());
+        return adjustedNewState;
     }
 
     //Updates the Text on Screen for a Main Menu Feel
@@ -65,22 +67,27 @@ public class MainMenu : MonoBehaviour
     //Loads the Game
     private void LoadGame() {
         if(Input.GetKeyDown(KeyCode.Return))
-            SceneManager.LoadScene("SinglePlayer");
+            LoadScene("SinglePlayer");
     }
 
     //Loads the 2 player game
     private void LoadTwoPlayer()
     {
         if (Input.GetKeyDown(KeyCode.Return))
-            SceneManager.LoadScene("TwoPlayer");
+            LoadScene("TwoPlayer");
     }
 
     //Takes the Player to the LeaderBoard Screen
     private void LeaderBoard() {
         if (Input.GetKeyDown(KeyCode.Return))
-            SceneManager.LoadScene("LeaderBoard");
+            LoadScene("LeaderBoard");
     }
 
+    private void LoadScene(string sceneName)
+    {
+        Message.Publish(new UiConfirmed());
+        SceneManager.LoadScene(sceneName);
+    }
 
     //Quits if the person decides to Exit the game
     private void Quit() {
