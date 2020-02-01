@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
             Started = true;
             SpawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
             GatherNavigation();
-            Respawn();
+            Spawn();
         }
 
     }
@@ -74,8 +74,21 @@ public class GameManager : MonoBehaviour
         MainCam.transform.GetComponent<CameraController>().enabled = true;
         MainCam.transform.GetComponent<CameraController>().ChangeDir();
     }
+
+    public void KillPlayer() {
+        MainCam.GetComponent<CameraController>().enabled = false;
+        Player.SetActive(false);
+        Player.transform.position = SpawnPoint.transform.position;
+    }
+
+    IEnumerator DeathRespawn()
+    {
+
+        yield return new WaitForSeconds(1);
+    }
+
     //The Player is Respawned
-    private void Respawn() {
+    private void Spawn() {
         Player.transform.position = SpawnPoint.transform.position;
         Player.SetActive(true);
     }

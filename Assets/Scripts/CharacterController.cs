@@ -167,6 +167,8 @@ public class CharacterController : MonoBehaviour
         //Lets you press the button to move up or down
         if (other.name == "TopDoor" || other.name == "BottomDoor")
             inRange = true;
+        if (other.CompareTag("Bounds"))
+            GameManager.Manager.KillPlayer();
     }
 
     private void OnTriggerExit(Collider other) {
