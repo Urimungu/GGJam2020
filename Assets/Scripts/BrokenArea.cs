@@ -31,8 +31,6 @@ public class BrokenArea : MonoBehaviour
     //If area is fixed
     private bool isFixed = false;
 
-    
-
     // Start is called before the first frame update
     private void Start()
     {
@@ -41,10 +39,8 @@ public class BrokenArea : MonoBehaviour
         spawnerName = spawnerObj.GetSpawnerName();
 
         //Set coroutine variables
-       
         repairStatusEnumerator = RepairStatusUpdate();
 
-        //Start coroutines
         StartCoroutine(repairStatusEnumerator);
     }
 
