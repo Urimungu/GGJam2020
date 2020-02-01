@@ -41,8 +41,8 @@ public class CharacterController : MonoBehaviour
         anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
     }
 
-    public void SetState(int state)
-    {
+
+    public void SetState(int state) {
         State = state;
     }
 
@@ -201,7 +201,7 @@ public class CharacterController : MonoBehaviour
         //Lets you press the button to move up or down
         if (other.name == "TopDoor" || other.name == "BottomDoor")
             inRange = true;
-        if (other.CompareTag("Bounds"))
+        if (other.CompareTag("DeathZone"))
             GameManager.Manager.KillPlayer();
     }
 
