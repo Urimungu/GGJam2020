@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -76,7 +77,8 @@ public class BrokenAreaSpawner : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Space))
+            GenerateNewBrokenArea();
     }
 
     /// <summary>
@@ -98,6 +100,7 @@ public class BrokenAreaSpawner : MonoBehaviour
         while (true)
         {
             ChangeSeverityState(brokenAreaInstances.Count);
+            
             yield return new WaitForEndOfFrame();
         }
     }
@@ -120,8 +123,19 @@ public class BrokenAreaSpawner : MonoBehaviour
 
         //We'll loop through our array, and add them to our list.
         foreach (BrokenArea area in childBrokenArea)
-        {
             brokenAreaInstances.Add(area);
+
+        UpdateBAID();
+    }
+
+    private void UpdateBAID()
+    {
+        uint baid = 0;
+
+        for (int index = 0; index < brokenAreaInstances.Count; index++)
+        {
+            baid = (uint)index;
+            brokenAreaInstances[index].SetBAID(baid);
         }
     }
 
@@ -178,8 +192,10 @@ public class BrokenAreaSpawner : MonoBehaviour
         BrokenArea targetObj = brokenAreaInstances[_index];
 
         //Destroy and remove object from list
-        Destroy(targetObj.gameObject);
         brokenAreaInstances.Remove(targetObj);
+        Destroy(targetObj.gameObject);
+
+        UpdateBAID();
     }
 
     #region Get Methods
