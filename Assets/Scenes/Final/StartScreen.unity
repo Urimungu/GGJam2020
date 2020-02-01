@@ -555,6 +555,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainCam: {fileID: 0}
   Player: {fileID: 0}
+  TopDoor: {fileID: 0}
+  BottomDoor: {fileID: 0}
+  TopBounds: []
+  BottomBounds: []
 --- !u!4 &1179805148
 Transform:
   m_ObjectHideFlags: 0

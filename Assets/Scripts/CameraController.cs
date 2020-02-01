@@ -20,6 +20,8 @@ public class CameraController : MonoBehaviour
             return;
         }
         ChangeDir();
+        //Sets the Main Camera on load
+        GameManager.Manager.MainCam = transform.GetChild(0).GetComponent<Camera>();
     }
 
     void FixedUpdate() {

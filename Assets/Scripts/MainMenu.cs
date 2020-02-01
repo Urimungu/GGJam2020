@@ -94,6 +94,5 @@ public class MainMenu : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.N))
                 canMove = true;
         }
-
     }
 }

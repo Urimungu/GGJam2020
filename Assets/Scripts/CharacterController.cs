@@ -13,13 +13,15 @@ public class CharacterController : MonoBehaviour
     //References
     private Rigidbody rb;
     private bool canMove = true;
-    private int State;
+    private int State ;         //Needs to Start at -1 so that it sets the bounds in game
+    public GameObject[] Bounds;
 
-    //Directions
+    //Variables
     private bool canDoubleJump = true;
     private bool topSection = true;
-    public GameObject[] TopBounds;
     private bool isRunning = false;
+    private bool inRange;
+    private bool onBottom;
 
     public LayerMask layerMask;
 
@@ -30,13 +32,16 @@ public class CharacterController : MonoBehaviour
     }
 
 
-    void FixedUpdate() {
+    private void Update() {
         //If the player is unable to move, don't let him move
         if (canMove) {
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
             Movement(horizontal, vertical);
         }
+        //When the player gets in range and they press up they Travel across the map
+        if(inRange && Input.GetKeyDown(KeyCode.W))
+            SwitchDoor();
     }
 
     //Moves the Player
@@ -45,6 +50,7 @@ public class CharacterController : MonoBehaviour
         Vector3 newVel = Direction() * playerSpeed * hor;
         rb.velocity = new Vector3(newVel.x, rb.velocity.y, newVel.z);
 
+        //Lets the player jump
         Jump();
 
         //Switches the player if he steps past the bounds
@@ -54,8 +60,7 @@ public class CharacterController : MonoBehaviour
     //Jumping Mechanics
     private void Jump() {
         //Double Jumps if the player is able to
-        print(CheckGrounded());
-        if (Input.GetKeyDown("space") && !CheckGrounded() && canDoubleJump)
+        if (Input.GetKeyDown("space") && canDoubleJump && !CheckGrounded())
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             canDoubleJump = false;
@@ -76,33 +81,35 @@ public class CharacterController : MonoBehaviour
 
     //Turns the player to the direction that he is on the robot
     void CheckSwitch(float hor){
-        //Don't switch if the player isn't on a plateform
-        if (!CheckGrounded())
+        //Don't switch if the player isn't on a plate form
+        if (!CheckGrounded() || Bounds.Length == 0) {
+            Bounds = GameManager.Manager.TopBounds;
             return;
+        }
         //Checks to see what direction the player is on
         switch (State) {
             case 0: //Front
-                if (transform.position.x > TopBounds[1].transform.position.x && hor > 0)
+                if (transform.position.x > Bounds[1].transform.position.x && hor > 0)
                     State = 1;
-                if (transform.position.x < TopBounds[0].transform.position.x && hor < 0)
+                if (transform.position.x < Bounds[0].transform.position.x && hor < 0)
                     State = 3;
                 break;
             case 1: //Right
-                if (transform.position.z > TopBounds[2].transform.position.z && hor > 0)
+                if (transform.position.z > Bounds[2].transform.position.z && hor > 0)
                     State = 2;
-                if (transform.position.z < TopBounds[1].transform.position.z && hor < 0)
+                if (transform.position.z < Bounds[1].transform.position.z && hor < 0)
                     State = 0;
                 break;
             case 2: //Back
-                if (transform.position.x < TopBounds[3].transform.position.x && hor > 0)
+                if (transform.position.x < Bounds[3].transform.position.x && hor > 0)
                     State = 3;
-                if (transform.position.x > TopBounds[2].transform.position.x && hor < 0)
+                if (transform.position.x > Bounds[2].transform.position.x && hor < 0)
                     State = 1;
                 break;
             case 3: //Left
-                if (transform.position.z < TopBounds[0].transform.position.z && hor > 0)
+                if (transform.position.z < Bounds[0].transform.position.z && hor > 0)
                     State = 0;
-                if (transform.position.z > TopBounds[3].transform.position.z && hor < 0)
+                if (transform.position.z > Bounds[3].transform.position.z && hor < 0)
                     State = 2;
                 break;
         }
@@ -121,6 +128,37 @@ public class CharacterController : MonoBehaviour
                 return Vector3.back;
         }
         return Vector3.zero;
+    }
+
+    private void SwitchDoor() {
+        //Goes to the Bottom
+        if(!onBottom) {
+            transform.position = GameManager.Manager.BottomDoor.position;
+            for (int i = 0; i < 4; i++)
+                Bounds[i] = GameManager.Manager.BottomBounds[i];
+            onBottom = true;
+            print("Made into Bottom");
+        }else {
+            //Goes to the Top
+            transform.position = GameManager.Manager.TopDoor.position;
+            for(int i = 0; i < 4; i++)
+                Bounds[i] = GameManager.Manager.TopBounds[i];
+            onBottom = false;
+            print("Made into Top");
+
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        //Lets you press the button to move up or down
+        if (other.name == "TopDoor" || other.name == "BottomDoor")
+            inRange = true;
+    }
+
+    private void OnTriggerExit(Collider other) {
+        //Lets you press the button to move up or down
+        if(other.name == "TopDoor" || other.name == "BottomDoor")
+            inRange = false;
     }
 
     //Returns the Current state of the player
