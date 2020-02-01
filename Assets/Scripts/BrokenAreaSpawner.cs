@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
 
 public class BrokenAreaSpawner : MonoBehaviour
 {
@@ -32,8 +34,9 @@ public class BrokenAreaSpawner : MonoBehaviour
     [Header("Spawner Name"), SerializeField]
     private string spawnerName = "New Spawn Area";
 
-    [Header("Spawning Range"), SerializeField]
-    [Range(0.1f, 50f)] private float spawningRange;
+    [Header("Spawning Range")]
+    [Range(0.1f, 50f), SerializeField] private float spawningRangeX;
+    [Range(0.1f, 50f), SerializeField] private float spawningRangeY;
 
     [Header("Broken Area Prefab"), SerializeField]
     private GameObject brokenAreaPrefab;
@@ -183,19 +186,18 @@ public class BrokenAreaSpawner : MonoBehaviour
     private void RandomizeAndSpawnBrokenArea()
     {
         //Generate X and Y values
-        float generatedXPos = Random.Range(-GetSpawningRange(), GetSpawningRange());
-        float generatedYPos = Random.Range(-GetSpawningRange(), GetSpawningRange());
-
-        //Create our offset from our spawner position
-        float xOffset = spawnerPosition.x + generatedXPos;
-        float yOffset = spawnerPosition.y + generatedYPos;
+        float generatedXPos = Random.Range(-GetSpawningRangeX(), GetSpawningRangeX());
+        float generatedYPos = Random.Range(-GetSpawningRangeY(), GetSpawningRangeY());
 
         //Create a new vector3
-        Vector3 brokenAreaPosition = new Vector3(xOffset, yOffset, spawnerPosition.z);
+        Vector3 xAxis = spawnerTransform.right * generatedXPos;
+        Vector3 yAxis = spawnerTransform.up * generatedYPos;
+
+        Vector3 brokenAreaPosition = xAxis + yAxis;
 
         //Now instantiate our brokenArea
-        GameObject newBrokenArea = Instantiate(brokenAreaPrefab.gameObject, gameObject.transform);
-        newBrokenArea.transform.position = brokenAreaPosition;
+        GameObject newBrokenArea = Instantiate(brokenAreaPrefab.gameObject, spawnerTransform);
+        newBrokenArea.transform.position += brokenAreaPosition;
     }
 
     /// <summary>
@@ -246,9 +248,13 @@ public class BrokenAreaSpawner : MonoBehaviour
         return spawnerName;
     }
 
-    public float GetSpawningRange()
+    public float GetSpawningRangeX()
     {
-        return spawningRange;
+        return spawningRangeX;
+    }
+    public float GetSpawningRangeY()
+    {
+        return spawningRangeY;
     }
     #endregion
 }
