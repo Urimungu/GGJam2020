@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 2720367758061079162}
   - component: {fileID: 6456521293761334200}
   - component: {fileID: 5237120165385755138}
-  - component: {fileID: 2935106625174412972}
+  - component: {fileID: 5482214959399200855}
   m_Layer: 0
   m_Name: BrokenAreaObj
-  m_TagString: Untagged
+  m_TagString: BrokenArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,6 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7374b75a7b49a674ab18fab8b991b2e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baid: 0
+  repairProgressValue: 0
+  repairIncrementValue: 1
+  spawnerName: 
+  isGettingFixed: 0
 --- !u!33 &6456521293761334200
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -91,17 +96,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &2935106625174412972
-MeshCollider:
+--- !u!65 &5482214959399200855
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2720367758061079163}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_Center: {x: 0, y: 0, z: 0}

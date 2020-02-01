@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.WSA.WebCam;
 
 public class BrokenArea : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class BrokenArea : MonoBehaviour
 
     [Header("Progress"), Range(0f, 100f), SerializeField] private float repairProgressValue;
 
-    [Header("Increment Value"), SerializeField] private float repairIncrementValue = 0.1f;
+    [Header("Increment Value"), SerializeField] private float repairIncrementValue = 1f;
 
     [Header("Name of Spawner"), SerializeField] private string spawnerName;
 
@@ -25,10 +26,12 @@ public class BrokenArea : MonoBehaviour
     private BrokenAreaSpawner spawnerObj;
 
     //Coroutine variables
-    private IEnumerator incrementRoutine;
+    private IEnumerator repairStatusEnumerator;
 
     //If area is fixed
     private bool isFixed = false;
+
+    
 
     // Start is called before the first frame update
     private void Start()
@@ -37,46 +40,88 @@ public class BrokenArea : MonoBehaviour
         spawnerObj = GetSpawnerOrigin();
         spawnerName = spawnerObj.GetSpawnerName();
 
-        //Set coroutine variable
-        incrementRoutine = IncrementRepairProgress();
-        StartCoroutine(incrementRoutine);
+        //Set coroutine variables
+       
+        repairStatusEnumerator = RepairStatusUpdate();
+
+        //Start coroutines
+        StartCoroutine(repairStatusEnumerator);
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-        RepairStatusUpdate();
-    }
+    
 
+    /// <summary>
+    /// Returns what spawner the brokenArea spawned from
+    /// </summary>
+    /// <returns></returns>
     private BrokenAreaSpawner GetSpawnerOrigin()
     {
         return GetComponentInParent<BrokenAreaSpawner>();
     }
 
-    private IEnumerator IncrementRepairProgress()
+    /// <summary>
+    /// Check if the brokenArea has been repaired
+    /// </summary>
+    private IEnumerator RepairStatusUpdate()
     {
-        while (isGettingFixed)
+        while (true)
         {
-            repairProgressValue += repairIncrementValue;
+            if (repairProgressValue > 99f)
+            {
+                isFixed = true;
+                spawnerObj.RemoveBrokenArea((int)baid);
+            }
+
             yield return new WaitForEndOfFrame();
-
-            if (isGettingFixed == false) break;
-        }
-    }
-
-    private void RepairStatusUpdate()
-    {
-        if (repairProgressValue > 0.99f)
-        {
-            isFixed = true;
-            spawnerObj.RemoveBrokenArea((int)baid);
         }
     }
 
     #region Set Methods
+    /// <summary>
+    /// Set the ID of the broken Area spanwned
+    /// </summary>
+    /// <param name="_value"></param>
     public void SetBAID(uint _value)
     {
         baid = _value;
+    }
+
+    public void SetIsGettingFixed(bool _flag)
+    {
+        isGettingFixed = _flag;
+    }
+
+    public void IncrementRepairProgressValue(float _value)
+    {
+        repairProgressValue += _value;
+    }
+    #endregion
+
+
+    #region Get Methods
+    /// <summary>
+    /// Returns the repairProgressValues into a value between 0 and 1
+    /// </summary>
+    public float GetRepairProgress(bool _inPercentage = false)
+    {
+        float value = 0;
+        switch (_inPercentage)
+        {
+            case false:
+                value = repairProgressValue;
+                break;
+
+            case true:
+                value = (repairProgressValue / 100f);
+                break;
+        }
+
+        return value;
+    }
+
+    public float GetRepairIncrement()
+    {
+        return repairIncrementValue;
     }
     #endregion
 }

@@ -25,7 +25,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     {
         NONE,
         MILD,
-        BAD,
+        HIGH,
         SEVERE
     }
 
@@ -33,7 +33,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private string spawnerName = "New Spawn Area";
 
     [Header("Spawning Range"), SerializeField]
-    [Range(1f, 50f)] private float spawningRange;
+    [Range(0.1f, 50f)] private float spawningRange;
 
     [Header("Broken Area Prefab"), SerializeField]
     private GameObject brokenAreaPrefab;
@@ -50,13 +50,17 @@ public class BrokenAreaSpawner : MonoBehaviour
     //Max Limit of spawning
     private const uint maxInstanceLimit = 3;
 
-    //brokenAreaInstances that needs removal
-    private List<BrokenArea> instanceToBeRemoved = new List<BrokenArea>();
-
     //Our transform, and Vector3
     //(UnityEngine.Vector3 was added because it conflicted with System.Numeric.Vector3)
     private Transform spawnerTransform;
     private Vector3 spawnerPosition;
+
+    //Ray and RaycastHit to detect mouse
+    Ray ray;
+    RaycastHit hit;
+
+    //IncrementRoutine
+    private IEnumerator incrementRoutine;
 
     private void Awake()
     {
@@ -70,7 +74,10 @@ public class BrokenAreaSpawner : MonoBehaviour
         #region Severity Update Checking
         //Start severityUpdate checking
         severityUpdate = SeverityStateUpdate();
+        incrementRoutine = IncrementRepairProgress();
+
         StartCoroutine(severityUpdate);
+        StartCoroutine(incrementRoutine);
         #endregion
     }
 
@@ -101,6 +108,40 @@ public class BrokenAreaSpawner : MonoBehaviour
         {
             ChangeSeverityState(brokenAreaInstances.Count);
             
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    /// <summary>
+    /// Check if mouse is hovering over object.
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckMouseCollision()
+    {
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        return Physics.Raycast(ray, out hit);
+    }
+
+    /// <summary>
+    /// Increments the repair progress every frame.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator IncrementRepairProgress()
+    {
+        while (true)
+        {
+            if (CheckMouseCollision() && hit.collider.tag == "BrokenArea")
+            {
+                BrokenArea effectedArea = hit.collider.gameObject.GetComponent<BrokenArea>();
+
+                float increment = effectedArea.GetRepairIncrement();
+
+                effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
+
+                if (Input.GetMouseButton(0)) effectedArea.IncrementRepairProgressValue(increment);
+            }
+
             yield return new WaitForEndOfFrame();
         }
     }
