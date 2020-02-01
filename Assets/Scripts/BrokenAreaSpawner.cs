@@ -2,7 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Xml;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
+using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 
@@ -31,11 +34,21 @@ public class BrokenAreaSpawner : MonoBehaviour
         SEVERE
     }
 
+    //Alert
+    public string[] alert =
+    {
+        "",
+        "You're too far to fix this area.",
+        "This area is irreparable.",
+        "Broken area has been repaired!!!"
+    };
+
     [Header("Spawner Name"), SerializeField]
     private string spawnerName = "New Spawn Area";
 
-    [Header("Spawning Range")]
-    [Range(0.1f, 50f), SerializeField] private float spawningRangeX;
+    [Header("Spawning Range")] [Range(0.1f, 50f), SerializeField]
+    private float spawningRangeX;
+
     [Range(0.1f, 50f), SerializeField] private float spawningRangeY;
 
     [Header("Broken Area Prefab"), SerializeField]
@@ -47,8 +60,17 @@ public class BrokenAreaSpawner : MonoBehaviour
     [Header("Area Severity"), SerializeField]
     private SeverityState severityState;
 
-    //IEnumerator coroutine variable
-    private IEnumerator severityUpdate;
+    [Header("Reachable Distance")] [Range(0.1f, 10f), SerializeField]
+    private float reachableDistance;
+
+    //If the player is with fixable distance, this will be true
+    [SerializeField] private bool interactable = false;
+
+    //IEnumerator coroutine variables
+    private IEnumerator severityUpdateRoutine;
+    private IEnumerator incrementRoutine;
+    private IEnumerator playerDistanceRoutine;
+    private IEnumerator maxDamageRoutine;
 
     //Max Limit of spawning
     private const uint maxInstanceLimit = 3;
@@ -59,28 +81,44 @@ public class BrokenAreaSpawner : MonoBehaviour
     private Vector3 spawnerPosition;
 
     //Ray and RaycastHit to detect mouse
-    Ray ray;
-    RaycastHit hit;
+    private Ray ray;
+    private RaycastHit hit;
 
-    //IncrementRoutine
-    private IEnumerator incrementRoutine;
+    //Reference to player
+    private GameObject player;
+
+    //Damage variable. This will reset once it hits 100, but it'll spawn a BrokenArea
+    private int areaDamage = 0;
+
+    //Constant for 0
+    private const uint reset = 0;
+
+    //Constant for maxDamage
+    private const uint maxDamage = 100;
 
     private void Awake()
     {
         spawnerTransform = GetComponent<Transform>();
         spawnerPosition = spawnerTransform.position;
+
+        //Find our player
+        player = FindObjectOfType<CharacterController>().gameObject;
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        #region Severity Update Checking
+        #region Coroutines
         //Start severityUpdate checking
-        severityUpdate = SeverityStateUpdate();
+        severityUpdateRoutine = SeverityStateUpdate();
         incrementRoutine = IncrementRepairProgress();
+        playerDistanceRoutine = CheckPlayerDistance();
+        maxDamageRoutine = CheckMaxDamage();
 
-        StartCoroutine(severityUpdate);
+        StartCoroutine(severityUpdateRoutine);
         StartCoroutine(incrementRoutine);
+        StartCoroutine(playerDistanceRoutine);
+        StartCoroutine(maxDamageRoutine);
         #endregion
     }
 
@@ -88,7 +126,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            GenerateNewBrokenArea();
+            SetDamage(10);
     }
 
     /// <summary>
@@ -98,7 +136,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private void ChangeSeverityState(int _value)
     {
         //Change the severity of an area.
-        severityState = (SeverityState)_value;
+        severityState = (SeverityState) _value;
     }
 
     /// <summary>
@@ -107,23 +145,14 @@ public class BrokenAreaSpawner : MonoBehaviour
     /// <returns></returns>
     private IEnumerator SeverityStateUpdate()
     {
+        #region Wait Each Frame
         while (true)
         {
             ChangeSeverityState(brokenAreaInstances.Count);
-            
+
             yield return new WaitForEndOfFrame();
-        }
-    }
-
-    /// <summary>
-    /// Check if mouse is hovering over object.
-    /// </summary>
-    /// <returns></returns>
-    private bool CheckMouseCollision()
-    {
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        return Physics.Raycast(ray, out hit);
+        } 
+        #endregion
     }
 
     /// <summary>
@@ -132,6 +161,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     /// <returns></returns>
     private IEnumerator IncrementRepairProgress()
     {
+        #region Wait Each Frame
         while (true)
         {
             if (CheckMouseCollision() && hit.collider.tag == "BrokenArea")
@@ -142,11 +172,90 @@ public class BrokenAreaSpawner : MonoBehaviour
 
                 effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
 
-                if (Input.GetMouseButton(0)) effectedArea.IncrementRepairProgressValue(increment);
+                //Update textUI
+                UIManager.Instance.SetAreaTextInfo(effectedArea.GetGeneralArea() + " (" + effectedArea.GetSeverity() +
+                                                   ")");
+                UIManager.Instance.SetProgressionInfo(effectedArea.GetRepairProgress(true));
+
+                if (Input.GetMouseButton(0))
+                {
+                    switch (effectedArea.GetSpawnerOrigin().GetInteractable())
+                    {
+                        case false:
+                            effectedArea.GetSpawnerOrigin().SendAlert(1);
+                            break;
+                        case true:
+                            effectedArea.IncrementRepairProgressValue(increment);
+                            effectedArea.GetSpawnerOrigin().SendAlert(reset);
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                UIManager.Instance.SetAreaTextInfo("???");
+                UIManager.Instance.SetProgressionInfo((float)reset);
             }
 
             yield return new WaitForEndOfFrame();
-        }
+        } 
+        #endregion
+    }
+
+    /// <summary>
+    /// Continuously check on player distance.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator CheckPlayerDistance()
+    {
+        #region Wait Each Frame
+        while (true)
+        {
+            Vector3 distance = Vector3.zero;
+
+            //Calculate distance of player
+            var dist = Vector3.Distance(spawnerTransform.position, player.transform.position);
+
+            //Check if player is within reachable distance
+            if (Mathf.Abs(dist) < reachableDistance)
+                interactable = true;
+            else
+                interactable = false;
+
+            yield return new WaitForEndOfFrame();
+        } 
+        #endregion
+    }
+
+    /// <summary>
+    /// Continuously check if max damage
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator CheckMaxDamage()
+    {
+        #region Wait Each Frame
+        while (true)
+        {
+            if (areaDamage >= maxDamage)
+            {
+                areaDamage = (int)reset;
+                GenerateNewBrokenArea();
+            }
+
+            yield return new WaitForEndOfFrame();
+        } 
+        #endregion
+    }
+
+/// <summary>
+    /// Check if mouse is hovering over object.
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckMouseCollision()
+    {
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        return Physics.Raycast(ray, out hit);
     }
 
     /// <summary>
@@ -172,6 +281,9 @@ public class BrokenAreaSpawner : MonoBehaviour
         UpdateBAID();
     }
 
+    /// <summary>
+    /// Updates the ID of a broken area. This is very important when it comes to refreshing our list.
+    /// </summary>
     private void UpdateBAID()
     {
         uint baid = 0;
@@ -183,6 +295,9 @@ public class BrokenAreaSpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generate a random location relative to spawner
+    /// </summary>
     private void RandomizeAndSpawnBrokenArea()
     {
         //Generate X and Y values
@@ -198,6 +313,15 @@ public class BrokenAreaSpawner : MonoBehaviour
         //Now instantiate our brokenArea
         GameObject newBrokenArea = Instantiate(brokenAreaPrefab.gameObject, spawnerTransform);
         newBrokenArea.transform.position += brokenAreaPosition;
+    }
+
+    /// <summary>
+    /// Send an alert!
+    /// </summary>
+    /// <param name="_index"></param>
+    private void SendAlert(uint _index)
+    {
+        UIManager.Instance.SetAlertText(alert[_index]);
     }
 
     /// <summary>
@@ -239,6 +363,13 @@ public class BrokenAreaSpawner : MonoBehaviour
         Destroy(targetObj.gameObject);
 
         UpdateBAID();
+
+        SendAlert(3);
+    }
+
+    public void SetDamage(int _value)
+    {
+        areaDamage += _value;
     }
 
     #region Get Methods
@@ -255,6 +386,16 @@ public class BrokenAreaSpawner : MonoBehaviour
     public float GetSpawningRangeY()
     {
         return spawningRangeY;
+    }
+
+    public string GetSeverityLevel()
+    {
+        return Enum.GetName(typeof(SeverityState), (int)severityState);
+    }
+
+    public bool GetInteractable()
+    {
+        return interactable;
     }
     #endregion
 }
