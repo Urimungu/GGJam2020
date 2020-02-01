@@ -69,7 +69,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     //IEnumerator coroutine variables
     private IEnumerator severityUpdateRoutine;
     private IEnumerator incrementRoutine;
-    private IEnumerator playerDistanceRoutine;
+
     private IEnumerator maxDamageRoutine;
 
     //Max Limit of spawning
@@ -84,8 +84,6 @@ public class BrokenAreaSpawner : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
 
-    //Reference to player
-    private GameObject player;
 
     //Damage variable. This will reset once it hits 100, but it'll spawn a BrokenArea
     private int areaDamage = 0;
@@ -100,9 +98,6 @@ public class BrokenAreaSpawner : MonoBehaviour
     {
         spawnerTransform = GetComponent<Transform>();
         spawnerPosition = spawnerTransform.position;
-
-        //Find our player
-        player = FindObjectOfType<CharacterController>().gameObject;
     }
 
     // Start is called before the first frame update
@@ -112,12 +107,10 @@ public class BrokenAreaSpawner : MonoBehaviour
         //Start severityUpdate checking
         severityUpdateRoutine = SeverityStateUpdate();
         incrementRoutine = IncrementRepairProgress();
-        playerDistanceRoutine = CheckPlayerDistance();
         maxDamageRoutine = CheckMaxDamage();
 
         StartCoroutine(severityUpdateRoutine);
         StartCoroutine(incrementRoutine);
-        StartCoroutine(playerDistanceRoutine);
         StartCoroutine(maxDamageRoutine);
         #endregion
     }
@@ -179,7 +172,7 @@ public class BrokenAreaSpawner : MonoBehaviour
 
                 if (Input.GetMouseButton(0))
                 {
-                    switch (effectedArea.GetSpawnerOrigin().GetInteractable())
+                    switch (effectedArea.GetIsInteractable())
                     {
                         case false:
                             effectedArea.GetSpawnerOrigin().SendAlert(1);
@@ -202,30 +195,7 @@ public class BrokenAreaSpawner : MonoBehaviour
         #endregion
     }
 
-    /// <summary>
-    /// Continuously check on player distance.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator CheckPlayerDistance()
-    {
-        #region Wait Each Frame
-        while (true)
-        {
-            Vector3 distance = Vector3.zero;
-
-            //Calculate distance of player
-            var dist = Vector3.Distance(spawnerTransform.position, player.transform.position);
-
-            //Check if player is within reachable distance
-            if (Mathf.Abs(dist) < reachableDistance)
-                interactable = true;
-            else
-                interactable = false;
-
-            yield return new WaitForEndOfFrame();
-        } 
-        #endregion
-    }
+    
 
     /// <summary>
     /// Continuously check if max damage
@@ -240,6 +210,7 @@ public class BrokenAreaSpawner : MonoBehaviour
             {
                 areaDamage = (int)reset;
                 GenerateNewBrokenArea();
+                LoseCondition.Instance.SendSignalToUpdateCounter();
             }
 
             yield return new WaitForEndOfFrame();
@@ -393,9 +364,9 @@ public class BrokenAreaSpawner : MonoBehaviour
         return Enum.GetName(typeof(SeverityState), (int)severityState);
     }
 
-    public bool GetInteractable()
+    public float GetReachableDistance()
     {
-        return interactable;
+        return reachableDistance;
     }
     #endregion
 }

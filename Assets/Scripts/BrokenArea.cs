@@ -24,14 +24,28 @@ public class BrokenArea : MonoBehaviour
 
     [Header("Being fixed?"), SerializeField] private bool isGettingFixed;
 
+    [Header("Interactable"), SerializeField]
+    private bool isInteractable;
+
     //Reference to spawer so we can remove the object if repaired
     private BrokenAreaSpawner spawnerObj;
 
     //Coroutine variables
     private IEnumerator repairStatusEnumerator;
+    private IEnumerator playerDistanceRoutine;
 
     //If area is fixed
     private bool isFixed = false;
+
+
+    //Reference to player
+    private GameObject player;
+
+    private void Awake()
+    {
+        //Find our player
+        player = FindObjectOfType<CharacterController>().gameObject;
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -40,12 +54,12 @@ public class BrokenArea : MonoBehaviour
         spawnerObj = GetSpawnerOrigin();
         spawnerName = spawnerObj.GetSpawnerName();
 
-        
-
         //Set coroutine variables
         repairStatusEnumerator = RepairStatusUpdate();
+        playerDistanceRoutine = CheckPlayerDistance();
 
         StartCoroutine(repairStatusEnumerator);
+        StartCoroutine(playerDistanceRoutine);
     }
 
     
@@ -68,6 +82,31 @@ public class BrokenArea : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    /// <summary>
+    /// Continuously check on player distance.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator CheckPlayerDistance()
+    {
+        #region Wait Each Frame
+        while (true)
+        {
+            Vector3 distance = Vector3.zero;
+
+            //Calculate distance of player
+            var dist = Vector3.Distance(transform.position, player.transform.position);
+
+            //Check if player is within reachable distance
+            if (Mathf.Abs(dist) < spawnerObj.GetReachableDistance())
+                isInteractable = true;
+            else
+                isInteractable = false;
+
+            yield return new WaitForEndOfFrame();
+        }
+        #endregion
     }
 
     #region Set Methods
@@ -138,6 +177,11 @@ public class BrokenArea : MonoBehaviour
     public string GetSeverity()
     {
         return severityState;
+    }
+
+    public bool GetIsInteractable()
+    {
+        return isInteractable;
     }
     #endregion
 }
