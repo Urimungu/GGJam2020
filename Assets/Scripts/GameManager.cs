@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,7 +12,6 @@ public class GameManager : MonoBehaviour
     public Camera MainCam;
 
     public GameObject Player;
-
 
     private void Awake(){
         if (Manager == null) {
@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
 
     public void SetCamera(Camera cam) {
         MainCam = cam;
+    }
+
+    public void StartGame()
+    {
+
+
     }
 
 }

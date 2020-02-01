@@ -14,17 +14,23 @@ public class CameraController : MonoBehaviour
         //Makes sure the Player is not set to null
         if (GameManager.Manager != null && GameManager.Manager.Player != null)
             Player = GameManager.Manager.Player.transform;
+        else {
+            Debug.LogError("Cannot Find the Player");
+            GetComponent<CameraController>().enabled = false;
+            return;
+        }
         ChangeDir();
     }
 
     void FixedUpdate() {
+        //Moves if it's allowed to
         if (CanMove)
             Movement();
 
         //Checks to make to see if the player changed states
-        if (Player.GetComponent<CharacterController>().state == oldInt) return;
+        if (Player.GetComponent<CharacterController>().GetState() == oldInt) return;
         ChangeDir();
-        oldInt = Player.GetComponent<CharacterController>().state;
+        oldInt = Player.GetComponent<CharacterController>().GetState();
     }
 
     void Movement() {
@@ -36,7 +42,7 @@ public class CameraController : MonoBehaviour
 
     //Changes the Camera Offset if the Player Offset Changes
     private void ChangeDir() {
-        switch (Player.GetComponent<CharacterController>().state) {
+        switch (Player.GetComponent<CharacterController>().GetState()) {
             case 0: //Front
                 Offset = new Vector3(0, offset.y, -offset.x);
                 break;
