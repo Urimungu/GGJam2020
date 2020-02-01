@@ -20,6 +20,8 @@ public class BrokenArea : MonoBehaviour
 
     [Header("Name of Spawner"), SerializeField] private string spawnerName;
 
+    [Header("Severity"), SerializeField] private string severityState;
+
     [Header("Being fixed?"), SerializeField] private bool isGettingFixed;
 
     //Reference to spawer so we can remove the object if repaired
@@ -38,6 +40,8 @@ public class BrokenArea : MonoBehaviour
         spawnerObj = GetSpawnerOrigin();
         spawnerName = spawnerObj.GetSpawnerName();
 
+        
+
         //Set coroutine variables
         repairStatusEnumerator = RepairStatusUpdate();
 
@@ -47,21 +51,15 @@ public class BrokenArea : MonoBehaviour
     
 
     /// <summary>
-    /// Returns what spawner the brokenArea spawned from
-    /// </summary>
-    /// <returns></returns>
-    private BrokenAreaSpawner GetSpawnerOrigin()
-    {
-        return GetComponentInParent<BrokenAreaSpawner>();
-    }
-
-    /// <summary>
     /// Check if the brokenArea has been repaired
     /// </summary>
     private IEnumerator RepairStatusUpdate()
     {
         while (true)
         {
+            //Get the severity
+            severityState = spawnerObj.GetSeverityLevel();
+
             if (repairProgressValue > 99f)
             {
                 isFixed = true;
@@ -93,8 +91,25 @@ public class BrokenArea : MonoBehaviour
     }
     #endregion
 
-
     #region Get Methods
+    /// <summary>
+    /// This will pass in the name of what part of the robot you are repairing.
+    /// </summary>
+    /// <returns></returns>
+    public string GetGeneralArea()
+    {
+        return spawnerName;
+    }
+
+    /// <summary>
+    /// Returns what spawner the brokenArea spawned from
+    /// </summary>
+    /// <returns></returns>
+    public BrokenAreaSpawner GetSpawnerOrigin()
+    {
+        return GetComponentInParent<BrokenAreaSpawner>();
+    }
+
     /// <summary>
     /// Returns the repairProgressValues into a value between 0 and 1
     /// </summary>
@@ -118,6 +133,11 @@ public class BrokenArea : MonoBehaviour
     public float GetRepairIncrement()
     {
         return repairIncrementValue;
+    }
+
+    public string GetSeverity()
+    {
+        return severityState;
     }
     #endregion
 }

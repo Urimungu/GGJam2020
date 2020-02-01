@@ -19,8 +19,8 @@ public class GameManager : MonoBehaviour
 
     //Navigation
     public Transform TopDoor, BottomDoor;
-    public GameObject[] TopBounds = new GameObject[4];
-    public GameObject[] BottomBounds = new GameObject[4];
+    public List<GameObject> TopBounds = new List<GameObject>();
+    public List<GameObject> BottomBounds = new List<GameObject>();
 
     private void Awake(){
         //Makes this Game Manager a Singleton
@@ -46,16 +46,15 @@ public class GameManager : MonoBehaviour
     }
 
     private void GatherNavigation() {
-        //Sets size of Arrays
-        TopBounds = new GameObject[4];
-        BottomBounds = new GameObject[4];
         //Finds the Bounds in the Scene
+        TopBounds.Clear();
+        BottomBounds.Clear();
         Transform temp = GameObject.FindGameObjectWithTag("Bounds").transform;
 
         //Fills in the Arrays
         for (int i = 0; i < 4; i++) {
-            TopBounds[i] = temp.GetChild(0).GetChild(i).gameObject;
-            BottomBounds[i] = temp.GetChild(1).GetChild(i).gameObject;
+            TopBounds.Add(temp.GetChild(0).GetChild(i).gameObject);
+            BottomBounds.Add(temp.GetChild(1).GetChild(i).gameObject);
         }
 
         TopDoor = temp.GetChild(2).GetChild(0);

@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baid: 0
   repairProgressValue: 0
-  repairIncrementValue: 1
+  repairIncrementValue: 0.1
   spawnerName: 
   isGettingFixed: 0
 --- !u!65 &5482214959399200855
