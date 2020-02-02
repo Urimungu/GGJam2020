@@ -36,7 +36,7 @@ public class UpPlats : MonoBehaviour
         if (transform.position.y <= yLoc - 1.9f)
             movingUp = true;
 
-        print(transform.position.y);
-        print(yLoc);
+       // print(transform.position.y);
+        //print(yLoc);
     }
 }

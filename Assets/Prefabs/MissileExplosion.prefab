@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7746660839165483941}
-  m_LocalRotation: {x: 0.6716743, y: -0.13929622, z: -0.727308, w: -0.02175626}
+  m_LocalRotation: {x: 0.3740326, y: -0.57502115, z: -0.49666786, w: -0.53176254}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -373.406, y: -86.52901, z: 189.19699}
+  m_LocalEulerAnglesHint: {x: -435.69202, y: 76.212006, z: 23.379002}
 --- !u!198 &8424001588550508248
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -169,7 +169,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -285,7 +285,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -607,7 +607,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -976,7 +976,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 50
+        scalar: 200
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -4769,3 +4769,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c74d455180941884799f85a8f3f3c453, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 1
