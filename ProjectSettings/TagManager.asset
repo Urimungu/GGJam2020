@@ -11,6 +11,7 @@ TagManager:
   - UiSounds
   - SpawnPoint
   - DeathZone
+  - GoDown
   layers:
   - Default
   - TransparentFX
