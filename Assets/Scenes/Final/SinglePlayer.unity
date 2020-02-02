@@ -7198,10 +7198,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4149364262a0f9b4e9e27d86972a9c55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDurationValue: 2
-  maxDurationValue: 60
-  decrementValue: 4
-  decrementLimit: 10
+  minDurationValue: 5
+  maxDurationValue: 15
+  minDamageValue: 50
+  maxDamageValue: 100
+  decrementValue: 1
+  decrementLimit: 1
 --- !u!1001 &1564923743
 PrefabInstance:
   m_ObjectHideFlags: 0

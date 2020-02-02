@@ -27,6 +27,9 @@ public class BrokenArea : MonoBehaviour
     [Header("Interactable"), SerializeField]
     private bool isInteractable;
 
+    [Header("Particle System"), SerializeField]
+    private ParticleSystem brokenAreaParticleSystem;
+
     //Reference to spawer so we can remove the object if repaired
     private BrokenAreaSpawner spawnerObj;
 
@@ -39,13 +42,10 @@ public class BrokenArea : MonoBehaviour
 
 
     //Reference to player
-    private GameObject player;
+    [SerializeField] private GameObject player;
 
-    private void Awake()
-    {
-        //Find our player
-        player = FindObjectOfType<CharacterController>().gameObject;
-    }
+    //Distance
+    [SerializeField] private float gdistance;
 
     // Start is called before the first frame update
     private void Start()
@@ -62,7 +62,6 @@ public class BrokenArea : MonoBehaviour
         StartCoroutine(playerDistanceRoutine);
     }
 
-    
 
     /// <summary>
     /// Check if the brokenArea has been repaired
@@ -99,11 +98,19 @@ public class BrokenArea : MonoBehaviour
             //Calculate distance of player
             var dist = Vector3.Distance(transform.position, player.transform.position);
 
+            gdistance = dist;
+
+            var reparable = (spawnerObj.GetSeverityState() != BrokenAreaSpawner.SeverityState.IRREPARABLE);
+
             //Check if player is within reachable distance
-            if (Mathf.Abs(dist) < spawnerObj.GetReachableDistance() && spawnerObj.GetSeverityState() != BrokenAreaSpawner.SeverityState.IRREPARABLE)
+            if (Mathf.Abs(dist) < spawnerObj.GetReachableDistance() && reparable)
                 isInteractable = true;
             else
+            {
                 isInteractable = false;
+                if (!reparable)
+                    brokenAreaParticleSystem.Stop();
+            }
 
             yield return new WaitForEndOfFrame();
         }

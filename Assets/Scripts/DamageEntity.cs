@@ -19,6 +19,12 @@ public class DamageEntity : MonoBehaviour
     [Header("Max Duration Value"), Range(1, 100)]
     [SerializeField] private int maxDurationValue = 60; //A minute (60 seconds) is default
 
+    [Header("Min Damage Value"), Range(1, 100)] [SerializeField]
+    private int minDamageValue = 10;
+
+    [Header("Max Damage Value"), Range(1, 100)] [SerializeField]
+    private int maxDamageValue = 100;
+
     [Header("Decrement Value"), Range(1, 10)]
     [SerializeField] private int decrementValue = 1; //Range decrease every spawn
 
@@ -54,7 +60,6 @@ public class DamageEntity : MonoBehaviour
             time += Time.deltaTime;
             if (time > setDuration)
             {
-                Debug.Log("Applying Damage....");
 
                 time = reset;
 
@@ -63,7 +68,7 @@ public class DamageEntity : MonoBehaviour
                     Random.Range((int)reset, BrokenSpawnerManager.Instance.GrabAllBrokenAreaSpawners().Count);
 
                 //Get random damage amount
-                int randomDamageValue = Random.Range((int) reset, 10);
+                int randomDamageValue = Random.Range(minDamageValue, maxDamageValue);
 
                 BrokenSpawnerManager.GetAreaSpawnerByIndex(randomSpawnerValue).SetDamage(randomDamageValue);
 
@@ -86,15 +91,14 @@ public class DamageEntity : MonoBehaviour
     void RandomizeDuration()
     {
         setDuration = Random.Range(minDurationValue, maxDurationValue);
-        Debug.Log("Duration now set to: " + setDuration);
     }
 
     void DecrementRange()
     {
         if (minDurationValue > decrementLimit)
-        {
             minDurationValue -= decrementLimit;
+        
+        if (maxDurationValue > decrementLimit)
             maxDurationValue -= decrementLimit;
-        }
     }
 }

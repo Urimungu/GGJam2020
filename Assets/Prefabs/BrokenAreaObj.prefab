@@ -50,7 +50,11 @@ MonoBehaviour:
   repairProgressValue: 0
   repairIncrementValue: 0.1
   spawnerName: 
+  severityState: 
   isGettingFixed: 0
+  isInteractable: 0
+  brokenAreaParticleSystem: {fileID: 4175507558183628231}
+  player: {fileID: 3816519319481492186, guid: 4a944b184f1e9a54992a04a821150dc0, type: 3}
 --- !u!65 &5482214959399200855
 BoxCollider:
   m_ObjectHideFlags: 0
