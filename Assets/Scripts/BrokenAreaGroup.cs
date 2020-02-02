@@ -60,6 +60,10 @@ public class BrokenAreaGroup : MonoBehaviour
                 updateCount = false;
             }
 
+            //Update UI
+            UIManager.Instance.SetHealthPercentageInfo(currentHealth);
+            UIManager.Instance.SetRobotHealthInfo(currentHealth / 100f);
+
             yield return new WaitForEndOfFrame();
         }
     }

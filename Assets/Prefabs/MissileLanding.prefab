@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 9054033804614794310}
   - component: {fileID: 2943786746616921626}
   - component: {fileID: 6522494283343160084}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MissileLanding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
