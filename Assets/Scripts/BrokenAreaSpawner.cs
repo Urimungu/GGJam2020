@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -31,7 +32,8 @@ public class BrokenAreaSpawner : MonoBehaviour
         NONE,
         MILD,
         HIGH,
-        SEVERE
+        SEVERE,
+        IRREPARABLE
     }
 
     //Alert
@@ -46,7 +48,8 @@ public class BrokenAreaSpawner : MonoBehaviour
     [Header("Spawner Name"), SerializeField]
     private string spawnerName = "New Spawn Area";
 
-    [Header("Spawning Range")] [Range(0.1f, 50f), SerializeField]
+    [Header("Spawning Range")]
+    [Range(0.1f, 50f), SerializeField]
     private float spawningRangeX;
 
     [Range(0.1f, 50f), SerializeField] private float spawningRangeY;
@@ -60,7 +63,8 @@ public class BrokenAreaSpawner : MonoBehaviour
     [Header("Area Severity"), SerializeField]
     private SeverityState severityState;
 
-    [Header("Reachable Distance")] [Range(0.1f, 10f), SerializeField]
+    [Header("Reachable Distance")]
+    [Range(0.1f, 10f), SerializeField]
     private float reachableDistance;
 
     //If the player is with fixable distance, this will be true
@@ -73,7 +77,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private IEnumerator maxDamageRoutine;
 
     //Max Limit of spawning
-    private const uint maxInstanceLimit = 3;
+    private const uint maxInstanceLimit = 4;
 
     //Our transform, and Vector3
     //(UnityEngine.Vector3 was added because it conflicted with System.Numeric.Vector3)
@@ -120,7 +124,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            SetDamage(10);
+            BrokenSpawnerManager.GetAreaSpawnerByIndex(0).SetDamage(10);
     }
 
     /// <summary>
@@ -130,7 +134,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private void ChangeSeverityState(int _value)
     {
         //Change the severity of an area.
-        severityState = (SeverityState) _value;
+        severityState = (SeverityState)_value;
     }
 
     /// <summary>
@@ -143,9 +147,8 @@ public class BrokenAreaSpawner : MonoBehaviour
         while (true)
         {
             ChangeSeverityState(brokenAreaInstances.Count);
-
             yield return new WaitForEndOfFrame();
-        } 
+        }
         #endregion
     }
 
@@ -155,49 +158,55 @@ public class BrokenAreaSpawner : MonoBehaviour
     /// <returns></returns>
     private IEnumerator IncrementRepairProgress()
     {
-        #region Wait Each Frame
-        while (true)
+        if (severityState != SeverityState.IRREPARABLE)
         {
-            if (CheckMouseCollision() && hit.collider.tag == "BrokenArea")
+            #region Wait Each Frame
+
+            while (true)
             {
-                BrokenArea effectedArea = hit.collider.gameObject.GetComponent<BrokenArea>();
-
-                float increment = effectedArea.GetRepairIncrement();
-
-                effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
-                UpdateIsRepairing(Input.GetMouseButton(0));
-
-                //Update textUI
-                UIManager.Instance.SetAreaTextInfo(effectedArea.GetGeneralArea() + " (" + effectedArea.GetSeverity() +
-                                                   ")");
-                UIManager.Instance.SetProgressionInfo(effectedArea.GetRepairProgress(true));
-
-                if (Input.GetMouseButton(0))
+                if (CheckMouseCollision() && hit.collider.tag == "BrokenArea")
                 {
-                    switch (effectedArea.GetIsInteractable())
+                    BrokenArea effectedArea = hit.collider.gameObject.GetComponent<BrokenArea>();
+
+                    float increment = effectedArea.GetRepairIncrement();
+
+                    effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
+                    UpdateIsRepairing(Input.GetMouseButton(0));
+                    effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
+
+
+                    //Update textUI
+                    UIManager.Instance.SetAreaTextInfo(effectedArea.GetGeneralArea() + " (" +
+                                                       effectedArea.GetSeverity() +
+                                                       ")");
+                    UIManager.Instance.SetProgressionInfo(effectedArea.GetRepairProgress(true));
+
+                    if (Input.GetMouseButton(0))
                     {
-                        case false:
-                            effectedArea.GetSpawnerOrigin().SendAlert(1);
-                            break;
-                        case true:
-                            effectedArea.IncrementRepairProgressValue(increment);
-                            effectedArea.GetSpawnerOrigin().SendAlert(reset);
-                            break;
+                        switch (effectedArea.GetIsInteractable())
+                        {
+                            case false:
+                                effectedArea.GetSpawnerOrigin().SendAlert(1);
+                                break;
+                            case true:
+                                effectedArea.IncrementRepairProgressValue(increment);
+                                effectedArea.GetSpawnerOrigin().SendAlert(reset);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        UpdateIsRepairing(false);
+                        UIManager.Instance.SetAreaTextInfo("???");
+                        UIManager.Instance.SetProgressionInfo((float)reset);
                     }
                 }
+                yield return new WaitForEndOfFrame();
             }
-            else
-            {
-                UpdateIsRepairing(false);
-                UIManager.Instance.SetAreaTextInfo("???");
-                UIManager.Instance.SetProgressionInfo((float)reset);
-            }
-
-            yield return new WaitForEndOfFrame();
-        } 
-        #endregion
+            #endregion
+        }
     }
-    
+
     /// <summary>
     /// Handles Changes to the IsRepairing State
     /// </summary>
@@ -227,11 +236,11 @@ public class BrokenAreaSpawner : MonoBehaviour
             }
 
             yield return new WaitForEndOfFrame();
-        } 
+        }
         #endregion
     }
 
-/// <summary>
+    /// <summary>
     /// Check if mouse is hovering over object.
     /// </summary>
     /// <returns></returns>
@@ -331,6 +340,19 @@ public class BrokenAreaSpawner : MonoBehaviour
 
             //Refresh list
             InstanceListRefresh();
+
+            #region Send Signal to Group
+            try
+            {
+                BrokenAreaGroup hi = GetComponentInParent<BrokenAreaGroup>();
+                if (hi != null)
+                    hi.SignalCountUpdate();
+            }
+            catch
+            {
+                throw new AbandonedMutexException();
+            }
+            #endregion
         }
     }
 
@@ -373,9 +395,14 @@ public class BrokenAreaSpawner : MonoBehaviour
         return spawningRangeY;
     }
 
-    public string GetSeverityLevel()
+    public string GetSeverityLevelAsString()
     {
         return Enum.GetName(typeof(SeverityState), (int)severityState);
+    }
+
+    public SeverityState GetSeverityState()
+    {
+        return severityState;
     }
 
     public float GetReachableDistance()
