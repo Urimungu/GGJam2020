@@ -26,7 +26,6 @@ public class UIManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(Instance);
         }
         else
         {
@@ -39,37 +38,37 @@ public class UIManager : MonoBehaviour
     #region Set Methods
     public void SetAreaTextInfo(string _value = "???")
     {
-        TMP_AREA.text = _value;
+        if (TMP_AREA != null) TMP_AREA.text = _value;
     }
 
     public void SetProgressionInfo(float _value = 0f)
     {
-        S_PROGRESSIONBAR.value = _value;
+        if (S_PROGRESSIONBAR != null) S_PROGRESSIONBAR.value = _value;
     }
 
     public void SetAlertText(string _value = "")
     {
-        TMP_ALERT.text = _value;
+        if (TMP_ALERT != null) TMP_ALERT.text = _value;
     }
 
     public void SetScoreText(string _value)
     {
-        T_SCORE.text = "Score:" + _value;
+        if (T_SCORE != null) T_SCORE.text = "Score:" + _value;
     }
 
     public void SetTimerText(string _value)
     {
-        T_TIMER.text = "Timer:\n" + _value;
+        if (T_TIMER != null) T_TIMER.text = "Timer:\n" + _value;
     }
 
     public void SetTimerText(float _minutes, float _seconds)
     {
-        T_TIMER.text = "Timer:\n" + _minutes + ":" + _seconds.ToString("00.00", CultureInfo.InvariantCulture);
+        if (T_TIMER != null) T_TIMER.text = "Timer:\n" + _minutes + ":" + _seconds.ToString("00.00", CultureInfo.InvariantCulture);
     }
 
     public void SetHighScoreText(string _value)
     {
-        T_HIGHSCORE.text = "Highscore:" + _value;
+        if (T_HIGHSCORE != null) T_HIGHSCORE.text = "Highscore:" + _value;
     }
     #endregion
 

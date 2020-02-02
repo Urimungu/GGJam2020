@@ -12,7 +12,7 @@ public class Timer : MonoBehaviour
     private float seconds = 0.00f;
 
     //Coroutine variable
-    private IEnumerator timerSystemRoutine;
+    public IEnumerator timerSystemRoutine;
 
     void Awake()
     {
