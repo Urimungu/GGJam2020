@@ -27,9 +27,6 @@ public class BrokenArea : MonoBehaviour
     [Header("Interactable"), SerializeField]
     private bool isInteractable;
 
-    [Header("Particle System"), SerializeField]
-    private ParticleSystem brokenAreaParticleSystem;
-
     //Reference to spawer so we can remove the object if repaired
     private BrokenAreaSpawner spawnerObj;
 
@@ -114,11 +111,7 @@ public class BrokenArea : MonoBehaviour
             if (Mathf.Abs(dist) < spawnerObj.GetReachableDistance() && reparable)
                 isInteractable = true;
             else
-            {
                 isInteractable = false;
-                if (!reparable)
-                    brokenAreaParticleSystem.Stop();
-            }
 
             yield return new WaitForEndOfFrame();
         }
