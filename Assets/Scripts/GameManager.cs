@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject MainCam;
     public GameObject Player;
     public GameObject SpawnPoint;
+    public float fallDurationSeconds = 4f;
 
     //Variables
     private bool Started = false;
@@ -88,7 +89,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator DeathRespawn()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(fallDurationSeconds);
         MainCam.GetComponent<CameraController>().enabled = true;
         Player.SetActive(true);
         Player.GetComponent<CharacterController>().SetState(0);

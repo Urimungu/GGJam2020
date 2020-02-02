@@ -166,8 +166,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c3758ffb2cb46f4a55132ec143ac4b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiSfx: {fileID: 11400000, guid: 67ac8d612af509048a21452576c6eac4, type: 2}
   player: {fileID: 3644897091991350318}
   footsteps: {fileID: 130760576612040550}
   jump: {fileID: 8300000, guid: 0167c7d72749f0441a875bc6a3fc6b0a, type: 3}
   airJump: {fileID: 8300000, guid: 4ddb86c1c75b1f24a9b8d108caf30060, type: 3}
-  falling: {fileID: 8300000, guid: d7aac1b45374a954aa8236edc7b3816c, type: 3}
+  falling: {fileID: 8300000, guid: 975e66b0ac4a66240bd68f72fb6a4e5a, type: 3}
