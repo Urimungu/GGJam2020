@@ -100,7 +100,7 @@ public class BrokenArea : MonoBehaviour
             var dist = Vector3.Distance(transform.position, player.transform.position);
 
             //Check if player is within reachable distance
-            if (Mathf.Abs(dist) < spawnerObj.GetReachableDistance())
+            if (Mathf.Abs(dist) < spawnerObj.GetReachableDistance() && spawnerObj.GetSeverityState() != BrokenAreaSpawner.SeverityState.IRREPARABLE)
                 isInteractable = true;
             else
                 isInteractable = false;
