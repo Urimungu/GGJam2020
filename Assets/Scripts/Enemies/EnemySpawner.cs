@@ -61,7 +61,8 @@ public class EnemySpawner : MonoBehaviour
     //Spawns in the enemy at near a player location using Pool
     private void SpawnEnemy() {
         Enemies[0].SetActive(true);
-        Enemies[0].transform.position = GameManager.Manager.Player.transform.position + new Vector3(0 ,spawnHeight,0);
+        Enemies[0].transform.position = GameManager.Manager.Player.transform.position + new Vector3(0 ,spawnHeight,0) +
+                                        Direction(GameManager.Manager.Player.GetComponent<CharacterController>().GetState()) * Random.Range(-3f, 3f);
         Enemies[0].GetComponent<EnemyMovement>().State = GameManager.Manager.Player.GetComponent<CharacterController>().GetState();
         ActiveEnemies.Add(Enemies[0]);
         Enemies.Remove(Enemies[0]);
@@ -100,6 +101,20 @@ public class EnemySpawner : MonoBehaviour
             Enemies.Add(ActiveEnemies[ActiveEnemies.Count - i]);
             ActiveEnemies.Remove(ActiveEnemies[ActiveEnemies.Count - i]);
         }
+    }
+
+    private Vector3 Direction(float state) {
+        switch(state) {
+            case 0: //Front
+                return Vector3.right;
+            case 1: //Right
+                return Vector3.forward;
+            case 2: //Back
+                return Vector3.left;
+            case 3: //Left
+                return Vector3.back;
+        }
+        return Vector3.zero;
     }
 
 }

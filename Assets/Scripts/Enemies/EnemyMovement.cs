@@ -79,7 +79,7 @@ public class EnemyMovement : MonoBehaviour
     }
 
     //Checks Ground Collision
-    private bool CheckGrounded() {
+    public bool CheckGrounded() {
         Vector3 physicsCenter = transform.position + GetComponent<CapsuleCollider>().center;
         return Physics.Raycast(physicsCenter - new Vector3(0 , (GetComponent<CapsuleCollider>().height / 2) - 0.1f,0), Vector3.down, rayCastLength, layerMask);
     }

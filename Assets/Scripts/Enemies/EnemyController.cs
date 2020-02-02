@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class EnemyController : MonoBehaviour
 {
@@ -17,6 +19,7 @@ public class EnemyController : MonoBehaviour
     private Vector3 RightDirection;
     private int oldState = 4;
     private bool isRunning;
+    private bool StopMoving;
 
     //References
     private Transform Player;
@@ -46,39 +49,62 @@ public class EnemyController : MonoBehaviour
         } else
             StopCoroutine(DeathTimer());
 
+        Horizontal = Move.Horizontal;
+
     }
 
     private float Movement() {
-        float distance = (new Vector2(transform.position.x, transform.position.z) - new Vector2(Player.transform.position.x, Player.transform.position.z)).magnitude;
-        float heightDist = Player.position.y - transform.position.y;
-        if(distance > 0.3f) {
-            return 1;
+        Vector3 spawn = (transform.position + GetComponent<CapsuleCollider>().center);
+        if (!Physics.Raycast(spawn, Vector3.down, 5, Move.layerMask)) {
+            StopMoving = true;
+            return Horizontal;
         }
 
-        if(distance < -0.3f){
+        if (StopMoving && !Move.CheckGrounded()) 
+            return 0;
+        else 
+            StopMoving = false;
+
+
+        if(distance() > 0.3f) 
+            return 1;
+        
+
+        if(distance() < -0.3f){
             return -1;
         }
         return 0;
     }
 
+    public float distance() {
+        switch(Move.State) {
+            case 0: //Front
+                return -(transform.position.x - Player.transform.position.x);
+            case 1: //Right
+                return -(transform.position.z - Player.transform.position.z);
+            case 2: //Back
+                return (transform.position.x - Player.transform.position.x);
+            case 3: //Left
+                return (transform.position.x - Player.transform.position.x);
+        }
+
+        return 0;
+    }
+
     private bool DecideJump() {
         //Positive (Moves Right)
-        RaycastHit hit, hit2;
-        bool hit1Hit = false, hit2Hit = false;
         Vector3 spawn = (transform.position + GetComponent<CapsuleCollider>().center);
 
         //Shoots the Raycasts
-        hit1Hit = Physics.Raycast(spawn + (RightDirection * 0.5f), Vector3.down, out hit, 5, Move.layerMask);
-        hit2Hit = Physics.Raycast(spawn + (RightDirection * PitLength), Vector3.down, out hit2, 5, Move.layerMask);
+        bool hit1Hit = Physics.Raycast(spawn + (RightDirection * 0.5f), Vector3.down, 5, Move.layerMask);
+        bool hit2Hit = Physics.Raycast(spawn + (RightDirection * PitLength), Vector3.down, 5, Move.layerMask);
 
         //Should Jump
-        if (!hit1Hit && hit2Hit) {
+        if (!hit1Hit && hit2Hit)
             return true;
 
-        }
-
-        Debug.DrawRay(spawn + (RightDirection * PitLength), Vector3.down, Color.red);
-        Debug.DrawRay(spawn + (RightDirection * 0.5f), Vector3.down, Color.red);
+        Debug.DrawRay(spawn + (RightDirection * PitLength * Horizontal), Vector3.down, Color.red);
+        Debug.DrawRay(spawn + (RightDirection * 0.5f * Horizontal), Vector3.down, Color.red);
         return false;
     }
 
