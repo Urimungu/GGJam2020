@@ -26,7 +26,7 @@ public class DamageEntity : MonoBehaviour
     [SerializeField] private int decrementLimit = 1;
 
     //Have us a timer, and set duration
-    private float time
+    private float time;
 
     //Simulation Coroutine
     private IEnumerator simulationRoutine;

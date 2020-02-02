@@ -10,6 +10,6 @@ public class LeaderBoard : MonoBehaviour
 
     void Start()
     {
-        topScore = Score.Instance.GetCurrentScore;
+        topScore = Score.Instance.GetCurrentScore();
     }
 }
