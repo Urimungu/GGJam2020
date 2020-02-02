@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour
 
     private Vector3 RightDirection;
     private int oldState = 4;
+    private bool isRunning;
 
     //References
     private Transform Player;
@@ -36,8 +37,14 @@ public class EnemyController : MonoBehaviour
         if (oldState != Move.State) {
             RightDirection = Move.Direction();
             oldState = Move.State;
-            print("Ran");
         }
+
+        if(Player.GetComponent<CharacterController>().GetState() != Move.State) {
+            isRunning = true;
+            if(!isRunning)
+                StartCoroutine(DeathTimer());
+        } else
+            StopCoroutine(DeathTimer());
 
     }
 
@@ -64,12 +71,8 @@ public class EnemyController : MonoBehaviour
         hit1Hit = Physics.Raycast(spawn + (RightDirection * 0.5f), Vector3.down, out hit, 5, Move.layerMask);
         hit2Hit = Physics.Raycast(spawn + (RightDirection * PitLength), Vector3.down, out hit2, 5, Move.layerMask);
 
-        print(hit1Hit);
-        print(hit2Hit);
-
         //Should Jump
         if (!hit1Hit && hit2Hit) {
-            print("Worked");
             return true;
 
         }
@@ -81,7 +84,8 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator DeathTimer() {
         yield return new WaitForSeconds(DeathOnNonMatch);
-
+        if(DeathComing)
+            KillEnemy();
 
     }
 
