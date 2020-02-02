@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3341911165379212865}
   - component: {fileID: 3341911165379212866}
   - component: {fileID: 3341911165379212864}
+  - component: {fileID: 431520447}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -113,7 +114,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3341911165379212869}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d09d188d1c1f67a4094a0ee8ad5cfb57, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.28
@@ -135,6 +136,21 @@ MonoBehaviour:
   Health: 100
   PitLength: 0
   JumpToDistance: 0
+  DeathOnNonMatch: 6
+  DeathComing: 0
+--- !u!65 &431520447
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3341911165379212869}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7, y: 1, z: 0.7}
+  m_Center: {x: -0.05, y: 0.43, z: -0.04}
 --- !u!1 &3341911165697659862
 GameObject:
   m_ObjectHideFlags: 0

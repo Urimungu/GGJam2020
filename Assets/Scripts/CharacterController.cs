@@ -218,6 +218,10 @@ public class CharacterController : MonoBehaviour
             Message.Publish(new PlayerFalling());
             GameManager.Manager.KillPlayer(0.8f, 2);
         }
+
+        if (other.CompareTag("Enemy")) {
+            GameManager.Manager.KillPlayer();
+        }
     }
 
     private void OnTriggerExit(Collider other) {
