@@ -8,4 +8,8 @@ public class LeaderBoard : MonoBehaviour
     public List<TextMeshProUGUI> leaderBoardNames = new List<TextMeshProUGUI>();
     private long topScore;
 
+    void Start()
+    {
+        topScore = Score.Instance.GetCurrentScore();
+    }
 }

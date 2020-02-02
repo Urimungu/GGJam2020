@@ -45,6 +45,7 @@ public class RandomRockets : MonoBehaviour
     void SpawnObject()
     {
         time = 0f;
+        Message.Publish(new MissileLaunched());
         Instantiate(missile, player.transform.position, target.transform.rotation);
     }
 

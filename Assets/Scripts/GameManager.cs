@@ -71,10 +71,10 @@ public class GameManager : MonoBehaviour
 
 
         //Camera
-        MainCam = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
-        MainCam.transform.GetComponent<CameraController>().Player = Player.transform;
-        MainCam.transform.GetComponent<CameraController>().enabled = true;
-        MainCam.transform.GetComponent<CameraController>().ChangeDir();
+        MainCam = GameObject.FindGameObjectWithTag("MainCamera").transform.gameObject;
+        MainCam.transform.parent.GetComponent<CameraController>().Player = Player.transform;
+        MainCam.transform.parent.GetComponent<CameraController>().enabled = true;
+        MainCam.transform.parent.GetComponent<CameraController>().ChangeDir();
     }
 
 
@@ -89,21 +89,26 @@ public class GameManager : MonoBehaviour
     IEnumerator DeathRespawn(float FirstTimer, float SecondTimer)
     {
         yield return new WaitForSeconds(FirstTimer);
-        MainCam.GetComponent<CameraController>().enabled = false;
+        MainCam.transform.parent.GetComponent<CameraController>().enabled = false;
         Player.SetActive(false);
-        Player.transform.position = SpawnPoint.transform.position;
         yield return new WaitForSeconds(SecondTimer);
-        MainCam.GetComponent<CameraController>().enabled = true;
-        Player.SetActive(true);
+        MainCam.transform.parent.GetComponent<CameraController>().enabled = true;
+        Spawn();
         Player.GetComponent<CharacterController>().SetState(0);
-        MainCam.GetComponent<CameraController>().ChangeDir();
+        MainCam.transform.parent.GetComponent<CameraController>().ChangeDir();
         Player.GetComponent<CharacterController>().canMove = true;
 
         isRunning = false;
     }
 
     //The Player is Respawned
-    private void Spawn() {
+    private void Spawn()
+    {
+        if (SpawnPoint == null && GameObject.FindGameObjectWithTag("SpawnPoint"))
+            SpawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+        else if (SpawnPoint == null)
+            return;
+
         Player.transform.position = SpawnPoint.transform.position;
         Player.SetActive(true);
     }
