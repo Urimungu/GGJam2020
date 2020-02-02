@@ -50,7 +50,7 @@ public class BrokenSpawnerManager : MonoBehaviour
     {
         while (true)
         {
-            if(brokenAreaGroup.GetHealth() <= 0)
+            if (brokenAreaGroup.GetHealth() <= 0)
                 GameManager.Manager.LoseSinglePlayer();
 
             yield return new WaitForEndOfFrame();
