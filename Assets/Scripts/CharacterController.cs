@@ -11,7 +11,6 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private float doubleJumpForce =5;
     [SerializeField] private float gravity = 1;
     [SerializeField] private float rayCastLength;
-    [SerializeField] private ParticleSystem explosion;
 
     //References
     private Rigidbody rb;
@@ -77,7 +76,6 @@ public class CharacterController : MonoBehaviour
         //Kills himself button
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Instantiate(explosion, transform.position, Quaternion.LookRotation(GameObject.FindGameObjectWithTag("MainCamera").transform.position - transform.position));
             GameManager.Manager.KillPlayer(0, 1);
         }
     }
@@ -222,6 +220,10 @@ public class CharacterController : MonoBehaviour
         {
             Message.Publish(new PlayerFalling());
             GameManager.Manager.KillPlayer(0.8f, 2);
+        }
+
+        if (other.CompareTag("Enemy")) {
+            GameManager.Manager.KillPlayer();
         }
     }
 
