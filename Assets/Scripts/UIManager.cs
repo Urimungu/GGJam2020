@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            Debug.LogWarning("There was another instance of " + gameObject.name + ", so it was deleted. You may experience issues.");
             Destroy(gameObject);
         } 
         #endregion
