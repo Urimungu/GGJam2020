@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9158264934900493378}
   - component: {fileID: 6466616259751683472}
   - component: {fileID: 4605774627102052061}
+  - component: {fileID: 7087428415217497419}
   m_Layer: 0
   m_Name: UiSfxPlayer
   m_TagString: UiSounds
@@ -160,3 +161,19 @@ MonoBehaviour:
   confirm: {fileID: 8300000, guid: 79af89952293a6943978238030e09ac8, type: 3}
   cancel: {fileID: 8300000, guid: ce479ea5b80392b459b6afd72ebc8da9, type: 3}
   selectionChanged: {fileID: 8300000, guid: 1ed87feb6ee1c754eb17d63fa4c872ce, type: 3}
+--- !u!114 &7087428415217497419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8001851519730632264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4647ce80edc48bbb01b24f827b5bd5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mixer: {fileID: 24100000, guid: 08f3c07ca123a394ea898cb5252b66de, type: 2}
+  valueName: UiSounds
+  player: {fileID: 0}
+  demoSound: {fileID: 0}
