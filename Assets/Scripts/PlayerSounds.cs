@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public sealed class PlayerSounds : OnMessage<PlayerStartedWalking, PlayerStoppedWalking, PlayerJumped, PlayerDoubleJumped, 
-    PlayerFalling, RepairCompleted, RepairStarted, RepairStopped>
+    PlayerFalling, RepairCompleted, RepairStarted, RepairStopped, MissileHitPlayer>
 {
     [SerializeField] private UiSfxPlayer uiSfx;
     [SerializeField] private AudioSource player;
@@ -11,6 +11,7 @@ public sealed class PlayerSounds : OnMessage<PlayerStartedWalking, PlayerStopped
     [SerializeField] private AudioClip airJump;
     [SerializeField] private AudioClip falling;
     [SerializeField] private AudioClip objectRepaired;
+    [SerializeField] private AudioClip missile;
 
     protected override void Execute(PlayerStartedWalking msg) => footsteps.StartWalking();
     protected override void Execute(PlayerStoppedWalking msg) => footsteps.StopWalking();
@@ -25,4 +26,6 @@ public sealed class PlayerSounds : OnMessage<PlayerStartedWalking, PlayerStopped
         repairing.StopRepairing();
         uiSfx.Play(objectRepaired);
     }
+
+    protected override void Execute(MissileHitPlayer msg) => player.PlayOneShot(missile);
 }
