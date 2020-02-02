@@ -14,10 +14,12 @@ public class UIManager : MonoBehaviour
     [Header("UI Assets")]
     [SerializeField] private TextMeshProUGUI TMP_AREA;
     [SerializeField] private TextMeshProUGUI TMP_ALERT;
+    [SerializeField] private TextMeshProUGUI TMP_HEALTHPERCENTAGE;
     [SerializeField] private Text T_SCORE;
     [SerializeField] private Text T_TIMER;
     [SerializeField] private Text T_HIGHSCORE;
     [SerializeField] private Slider S_PROGRESSIONBAR;
+    [SerializeField] private Slider S_ROBOTHEALTH;
 
 
     void Awake()
@@ -44,6 +46,16 @@ public class UIManager : MonoBehaviour
     public void SetProgressionInfo(float _value = 0f)
     {
         if (S_PROGRESSIONBAR != null) S_PROGRESSIONBAR.value = _value;
+    }
+
+    public void SetRobotHealthInfo(float _value = 0f)
+    {
+        if (S_ROBOTHEALTH != null) S_ROBOTHEALTH.value = _value;
+    }
+
+    public void SetHealthPercentageInfo(float _value = 0f)
+    {
+        if (TMP_HEALTHPERCENTAGE != null) TMP_HEALTHPERCENTAGE.text = _value + "%";
     }
 
     public void SetAlertText(string _value = "")
