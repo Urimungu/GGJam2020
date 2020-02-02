@@ -36,9 +36,17 @@ public class CharacterController : MonoBehaviour
     //Initializes the Player
     void Start(){
         rb = GetComponent<Rigidbody>();
+        anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+
+        if (GameManager.Manager == null)
+            return;
+
+        //If the Bounds don't exist yet
+        if(Bounds.Count == 0 && GameManager.Manager.TopBounds.Count == 0)
+            Bounds = new List<Vector3> { new Vector3(-100, 0, 0), new Vector3(100, 0, 0), new Vector3(100, 0, 100), new Vector3(-100, 0, 100) };
+
         GameManager.Manager.Player = gameObject;
         rocketFire = transform.GetChild(1).GetComponent<ParticleSystem>();
-        anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
     }
 
 
@@ -63,6 +71,10 @@ public class CharacterController : MonoBehaviour
         if(Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude) > 0.1f)
             transform.GetChild(0).rotation =
             Quaternion.LookRotation(new Vector3(rb.velocity.x, 0, rb.velocity.z), Vector3.up);
+
+        //Kills himself button
+        if(Input.GetKeyDown(KeyCode.R))
+            GameManager.Manager.KillPlayer(0, 1);
     }
 
     private void UpdateSpeed()
