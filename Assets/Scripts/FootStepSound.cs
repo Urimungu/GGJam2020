@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof (AudioSource))]
 public class FootStepSound : MonoBehaviour
@@ -6,24 +7,27 @@ public class FootStepSound : MonoBehaviour
     [SerializeField] private AudioClip[] steps;
     [SerializeField] private float timeBetweenSteps = 0.3f;
     [SerializeField] private bool startWalkingOnAwake = true;
-
+    [SerializeField] private float delayBeforeCanWalk = 1.5f;
+    
     private float _cooldownRemaining;
-    private bool _isWalking = true;
+    private bool _isWalking = false;
     private int index;
     private AudioSource characterSteps; 
  
-    void Awake()
+    void Awake() => characterSteps = GetComponent<AudioSource>();
+    void Start() => StartCoroutine(StartAutoWalk());
+    
+
+    private IEnumerator StartAutoWalk()
     {
-        characterSteps = GetComponent<AudioSource>();
+        if (!startWalkingOnAwake)
+            yield break;
+        yield return new WaitForSeconds(delayBeforeCanWalk);
         _isWalking = startWalkingOnAwake;
     }
 
-    public void StartWalking()
-    {
-        _isWalking = true;
-    }
-
     public void StopWalking() => _isWalking = false;
+    public void StartWalking() => _isWalking = true;
     
     private void FixedUpdate()
     {
