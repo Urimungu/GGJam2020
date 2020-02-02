@@ -12,6 +12,7 @@ TagManager:
   - SpawnPoint
   - DeathZone
   - GoDown
+  - Enemy
   layers:
   - Default
   - TransparentFX
