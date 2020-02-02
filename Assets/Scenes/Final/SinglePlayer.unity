@@ -4318,6 +4318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 079c0b653cbc25c4eb79f2739b6cdf0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  brokenAreaGroup: {fileID: 39654859}
   serializedSpawners: []
 --- !u!4 &891194594
 Transform:

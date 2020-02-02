@@ -7,10 +7,14 @@ public class BrokenSpawnerManager : MonoBehaviour
 {
     public static BrokenSpawnerManager Instance;
 
+    public BrokenAreaGroup brokenAreaGroup;
+
     //Simply has a list of all existing spawners, as well as returning them
     private static List<BrokenAreaSpawner>  spawners = new List<BrokenAreaSpawner>();
 
     [SerializeField] private List<BrokenAreaSpawner> serializedSpawners;
+
+    private IEnumerator checkNoHealthRoutine;
 
     void Awake()
     {
@@ -26,6 +30,12 @@ public class BrokenSpawnerManager : MonoBehaviour
         #endregion
     }
 
+    void Start()
+    {
+        checkNoHealthRoutine = CheckNoHealth();
+        StartCoroutine(checkNoHealthRoutine);
+    }
+
     public static BrokenAreaSpawner GetAreaSpawnerByIndex(int _index)
     {
         return spawners[_index];
@@ -34,5 +44,16 @@ public class BrokenSpawnerManager : MonoBehaviour
     public List<BrokenAreaSpawner> GrabAllBrokenAreaSpawners()
     {
         return serializedSpawners;
+    }
+
+    private IEnumerator CheckNoHealth()
+    {
+        while (true)
+        {
+            if(brokenAreaGroup.GetHealth() <= 0)
+                GameManager.Manager.LoseSinglePlayer();
+
+            yield return new WaitForEndOfFrame();
+        }
     }
 }
