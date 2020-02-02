@@ -14,7 +14,7 @@ public class CharacterController : MonoBehaviour
 
     //References
     private Rigidbody rb;
-    private bool canMove = true;
+    public bool canMove = true;
     private int State ;         //Needs to Start at -1 so that it sets the bounds in game
 
     public List<Vector3> Bounds = new List<Vector3>();
@@ -26,6 +26,8 @@ public class CharacterController : MonoBehaviour
     private bool canDoubleJump = true;
     private bool topSection = true;
     private bool isRunning = false;
+    private bool isWalking = false;
+    private bool isGrounded = false;
     private bool inRange;
     private bool onBottom;
 
@@ -37,14 +39,11 @@ public class CharacterController : MonoBehaviour
         GameManager.Manager.Player = gameObject;
         rocketFire = transform.GetChild(1).GetComponent<ParticleSystem>();
         anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
-
     }
 
 
-    public void SetState(int state)
-    {
+    public void SetState(int state) {
         State = state;
-
     }
 
     private void Update() {
@@ -54,14 +53,38 @@ public class CharacterController : MonoBehaviour
             float vertical = Input.GetAxisRaw("Vertical");
             Movement(horizontal, vertical);
         }
+
+        isGrounded = CheckGrounded();
         //When the player gets in range and they press up they Travel across the map
         if(inRange && Input.GetKeyDown(KeyCode.W))
             SwitchDoor();
-        anim.SetFloat("Speed", Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude));
-        anim.SetBool("Grounded", CheckGrounded());
+        UpdateSpeed();
+        UpdateGroundedState();
         if(Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude) > 0.1f)
             transform.GetChild(0).rotation =
             Quaternion.LookRotation(new Vector3(rb.velocity.x, 0, rb.velocity.z), Vector3.up);
+    }
+
+    private void UpdateSpeed()
+    {
+        var speed = Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude);
+        anim.SetFloat("Speed", speed);
+        UpdateWalkingState(speed);
+    }
+
+    private void UpdateWalkingState(float speed)
+    {
+        var previousWalkingState = isWalking;
+        isWalking = speed > 0.01 && isGrounded;
+        if (isWalking != previousWalkingState)
+            Message.Publish(isWalking ? new PlayerStartedWalking() : (object) new PlayerStoppedWalking());
+    }
+
+    private void UpdateGroundedState()
+    {
+        anim.SetBool("Grounded", isGrounded);
+        if (!isGrounded)
+            isWalking = false;
     }
 
     //Moves the Player
@@ -69,7 +92,7 @@ public class CharacterController : MonoBehaviour
         //Moves the player in the Direction that he is compared to the Robot
         Vector3 newVel = Direction() * playerSpeed * hor;
         rb.velocity = new Vector3(newVel.x, rb.velocity.y -gravity , newVel.z);
-
+        
         //Lets the player jump
         Jump();
 
@@ -80,18 +103,20 @@ public class CharacterController : MonoBehaviour
     //Jumping Mechanics
     private void Jump() {
         //Double Jumps if the player is able to
-        if (Input.GetKeyDown("space") && canDoubleJump && !CheckGrounded())
+        if (Input.GetKeyDown("space") && canDoubleJump && !isGrounded)
         {
             rb.velocity = new Vector3(rb.velocity.x, doubleJumpForce, rb.velocity.z);
             rocketFire.Play();
             canDoubleJump = false;
+            Message.Publish(new PlayerDoubleJumped());
         }
         //Initial Jump Condition
-        if (Input.GetKeyDown("space") && CheckGrounded())
+        if (Input.GetKeyDown("space") && isGrounded)
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             canDoubleJump = true;
             rocketFire.Stop();
+            Message.Publish(new PlayerJumped());
         }
     }
 
@@ -104,7 +129,7 @@ public class CharacterController : MonoBehaviour
     //Turns the player to the direction that he is on the robot
     void CheckSwitch(float hor){
         //Don't switch if the player isn't on a plate form
-        if (!CheckGrounded()) 
+        if (!isGrounded) 
             return;
         
         //Checks to see what direction the player is on
@@ -176,8 +201,8 @@ public class CharacterController : MonoBehaviour
         //Lets you press the button to move up or down
         if (other.name == "TopDoor" || other.name == "BottomDoor")
             inRange = true;
-        if (other.CompareTag("Bounds"))
-            GameManager.Manager.KillPlayer();
+        if (other.CompareTag("DeathZone"))
+            GameManager.Manager.KillPlayer(0.8f,2);
     }
 
     private void OnTriggerExit(Collider other) {

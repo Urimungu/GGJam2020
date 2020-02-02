@@ -31,7 +31,7 @@ public class MainMenu : MonoBehaviour
     //Makes sure the state doesn't fall out of bounds
     private int BoundsTracker(bool add) {
         int newState = State + (add ? 1 : -1);
-        var adjustedNewState = newState > 3 ? 0 : newState < 0 ? 3 : newState;
+        var adjustedNewState = newState > 2 ? 0 : newState < 0 ? 2 : newState;
         if (adjustedNewState != State)
             Message.Publish(new UiSelectionChanged());
         return adjustedNewState;
@@ -42,23 +42,18 @@ public class MainMenu : MonoBehaviour
         switch(State) {
             //Start
             case 0:
-                Options.text = ">>Start<<\n2-Player Start\nLeader Board\nQuit\n\n";
+                Options.text = ">>Start<<\nLeader Board\nQuit\n\n";
                 LoadGame();
                 break;
-            //2 Player
-            case 1:
-                Options.text = "Start\n>>2-Player Start<<\nLeader Board\nQuit\n\n";
-                LoadTwoPlayer();
-            break;
             //Leader Board
-            case 2:
-                Options.text = "Start\n2-Player Start\n>>Leader Board<<\nQuit\n\n";
+            case 1:
+                Options.text = "Start\n>>Leader Board<<\nQuit\n\n";
                 LeaderBoard();
             break;
             //Quit
-            case 3:
+            case 2:
                 //Displays the Text for Quit
-                Options.text = "Start\n2-Player Start\nLeader Board\n>>Quit<<\n\n";
+                Options.text = "Start\nLeader Board\n>>Quit<<\n\n";
                 Quit();
                 break;
         }
@@ -68,13 +63,6 @@ public class MainMenu : MonoBehaviour
     private void LoadGame() {
         if(Input.GetKeyDown(KeyCode.Return))
             LoadScene("SinglePlayer");
-    }
-
-    //Loads the 2 player game
-    private void LoadTwoPlayer()
-    {
-        if (Input.GetKeyDown(KeyCode.Return))
-            LoadScene("TwoPlayer");
     }
 
     //Takes the Player to the LeaderBoard Screen

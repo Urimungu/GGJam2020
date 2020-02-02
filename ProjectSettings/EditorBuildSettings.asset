@@ -12,9 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Final/SinglePlayer.unity
     guid: 5245a28d2d9d3e84da5380633bf245be
   - enabled: 1
-    path: Assets/Scenes/Final/TwoPlayer.unity
-    guid: 0f386702f7e5bae46b6b82623e493122
-  - enabled: 1
     path: Assets/Scenes/Final/LeaderBoard.unity
     guid: b533f3e0401994a46b50e93f71952085
   m_configObjects: {}

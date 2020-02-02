@@ -9,6 +9,8 @@ TagManager:
   - Bounds
   - Music
   - UiSounds
+  - SpawnPoint
+  - DeathZone
   layers:
   - Default
   - TransparentFX
