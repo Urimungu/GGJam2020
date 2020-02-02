@@ -91,7 +91,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private bool isRepairing;
 
     //Damage variable. This will reset once it hits 100, but it'll spawn a BrokenArea
-    private int areaDamage = 0;
+    [SerializeField] private int areaDamage = 0;
 
     //Constant for 0
     private const uint reset = 0;
@@ -118,13 +118,6 @@ public class BrokenAreaSpawner : MonoBehaviour
         StartCoroutine(incrementRoutine);
         StartCoroutine(maxDamageRoutine);
         #endregion
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            BrokenSpawnerManager.GetAreaSpawnerByIndex(0).SetDamage(1);
     }
 
     /// <summary>
