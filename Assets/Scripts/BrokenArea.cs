@@ -72,7 +72,7 @@ public class BrokenArea : MonoBehaviour
         while (true)
         {
             //Get the severity
-            severityState = spawnerObj.GetSeverityLevel();
+            severityState = spawnerObj.GetSeverityLevelAsString();
 
             if (repairProgressValue > 99f)
             {
