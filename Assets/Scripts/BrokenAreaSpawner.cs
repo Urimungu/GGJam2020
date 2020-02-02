@@ -171,7 +171,7 @@ public class BrokenAreaSpawner : MonoBehaviour
                     float increment = effectedArea.GetRepairIncrement();
 
                     effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
-                    UpdateIsRepairing(Input.GetMouseButton(0));
+
                     effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
 
 
@@ -189,18 +189,20 @@ public class BrokenAreaSpawner : MonoBehaviour
                                 effectedArea.GetSpawnerOrigin().SendAlert(1);
                                 break;
                             case true:
+                                UpdateIsRepairing(Input.GetMouseButton(0));
                                 effectedArea.IncrementRepairProgressValue(increment);
                                 effectedArea.GetSpawnerOrigin().SendAlert(reset);
                                 break;
                         }
                     }
-                    else
-                    {
-                        UpdateIsRepairing(false);
-                        UIManager.Instance.SetAreaTextInfo("???");
-                        UIManager.Instance.SetProgressionInfo((float)reset);
-                    }
                 }
+                else
+                {
+                    UpdateIsRepairing(false);
+                    UIManager.Instance.SetAreaTextInfo("???");
+                    UIManager.Instance.SetProgressionInfo((float)reset);
+                }
+
                 yield return new WaitForEndOfFrame();
             }
             #endregion
@@ -232,7 +234,6 @@ public class BrokenAreaSpawner : MonoBehaviour
             {
                 areaDamage = (int)reset;
                 GenerateNewBrokenArea();
-                LoseCondition.Instance.SendSignalToUpdateCounter();
             }
 
             yield return new WaitForEndOfFrame();
