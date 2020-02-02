@@ -84,6 +84,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
 
+    private bool isRepairing;
 
     //Damage variable. This will reset once it hits 100, but it'll spawn a BrokenArea
     private int areaDamage = 0;
@@ -164,6 +165,7 @@ public class BrokenAreaSpawner : MonoBehaviour
                 float increment = effectedArea.GetRepairIncrement();
 
                 effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
+                UpdateIsRepairing(Input.GetMouseButton(0));
 
                 //Update textUI
                 UIManager.Instance.SetAreaTextInfo(effectedArea.GetGeneralArea() + " (" + effectedArea.GetSeverity() +
@@ -186,6 +188,7 @@ public class BrokenAreaSpawner : MonoBehaviour
             }
             else
             {
+                UpdateIsRepairing(false);
                 UIManager.Instance.SetAreaTextInfo("???");
                 UIManager.Instance.SetProgressionInfo((float)reset);
             }
@@ -194,8 +197,18 @@ public class BrokenAreaSpawner : MonoBehaviour
         } 
         #endregion
     }
-
     
+    /// <summary>
+    /// Handles Changes to the IsRepairing State
+    /// </summary>
+    /// <returns></returns>
+    private void UpdateIsRepairing(bool newState)
+    {
+        var changed = isRepairing != newState;
+        if (changed)
+            Message.Publish(newState ? (object)new RepairStarted() : new RepairStopped());
+        isRepairing = newState;
+    }
 
     /// <summary>
     /// Continuously check if max damage
@@ -330,6 +343,7 @@ public class BrokenAreaSpawner : MonoBehaviour
         BrokenArea targetObj = brokenAreaInstances[_index];
 
         //Destroy and remove object from list
+        Message.Publish(new RepairCompleted());
         brokenAreaInstances.Remove(targetObj);
         Destroy(targetObj.gameObject);
 

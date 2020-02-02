@@ -38,7 +38,7 @@ public class CharacterController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         GameManager.Manager.Player = gameObject;
         rocketFire = transform.GetChild(1).GetComponent<ParticleSystem>();
-        anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        //anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
     }
 
 
