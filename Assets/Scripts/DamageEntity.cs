@@ -13,11 +13,11 @@ public class DamageEntity : MonoBehaviour
     while keeping the same range.
          */
 
-    [Header("Min Duration Value"), Range(1, 100)]
-    [SerializeField] private int minDurationValue = 10; //10 seconds is default
+    [Header("Min Duration Value"), Range(0.25f, 100f)]
+    [SerializeField] private float minDurationValue = 10; //10 seconds is default
 
     [Header("Max Duration Value"), Range(1, 100)]
-    [SerializeField] private int maxDurationValue = 60; //A minute (60 seconds) is default
+    [SerializeField] private float maxDurationValue = 60; //A minute (60 seconds) is default
 
     [Header("Min Damage Value"), Range(1, 100)] [SerializeField]
     private int minDamageValue = 10;
@@ -28,12 +28,12 @@ public class DamageEntity : MonoBehaviour
     [Header("Decrement Value"), Range(1, 10)]
     [SerializeField] private int decrementValue = 1; //Range decrease every spawn
 
-    [Header("Decrement Limit"), Range(1, 10)]
-    [SerializeField] private int decrementLimit = 1;
+    [Header("Decrement Limit"), Range(0.25f, 10f)]
+    [SerializeField] private float decrementLimit = 0.25f;
 
     //Have us a timer, and set duration
     private float time;
-    private int setDuration;
+    private float setDuration;
 
     //Simulation Coroutine
     private IEnumerator simulationRoutine;
