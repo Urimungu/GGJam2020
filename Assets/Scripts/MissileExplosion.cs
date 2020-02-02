@@ -36,6 +36,7 @@ public class MissileExplosion : MonoBehaviour
             //if player is in explosion radius, die
             if (inRange)
             {
+                Message.Publish(new MissileHitPlayer());
                 GameManager.Manager.KillPlayer();
             }
         }
