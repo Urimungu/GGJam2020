@@ -77,6 +77,7 @@ public class BrokenArea : MonoBehaviour
             if (repairProgressValue > 99f)
             {
                 isFixed = true;
+                Score.Instance.SendRepairScore();
                 spawnerObj.RemoveBrokenArea((int)baid);
             }
 
