@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject MainCam;
     public GameObject Player;
     public GameObject SpawnPoint;
+    public float fallDurationSeconds = 4f;
 
     //Variables
     private bool Started = false;

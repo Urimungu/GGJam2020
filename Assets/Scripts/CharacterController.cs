@@ -202,7 +202,10 @@ public class CharacterController : MonoBehaviour
         if (other.name == "TopDoor" || other.name == "BottomDoor")
             inRange = true;
         if (other.CompareTag("DeathZone"))
-            GameManager.Manager.KillPlayer(0.8f,2);
+        {
+            Message.Publish(new PlayerFalling());
+            GameManager.Manager.KillPlayer(0.8f, 2);
+        }
     }
 
     private void OnTriggerExit(Collider other) {
