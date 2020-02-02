@@ -9,7 +9,7 @@ public class UpPlats : MonoBehaviour
     public float distance = 2.0f;
     bool movingUp = true;
 
-    public float speed = 4.0f;
+    private float speed = 2.0f;
 
     private float yLoc;
 
