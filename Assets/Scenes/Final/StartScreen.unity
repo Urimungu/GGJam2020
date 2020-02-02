@@ -389,6 +389,7 @@ GameObject:
   - component: {fileID: 631834050}
   - component: {fileID: 631834052}
   - component: {fileID: 631834051}
+  - component: {fileID: 631834053}
   m_Layer: 5
   m_Name: Gear (2)
   m_TagString: Untagged
@@ -452,6 +453,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 631834049}
   m_CullTransparentMesh: 0
+--- !u!114 &631834053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631834049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93056b3671f6dff41aa228e3e216fb95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 30
 --- !u!4 &749599147 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 582293457086811862, guid: d43877dc3e5e9204ca323dd8fa807bf8,
@@ -469,6 +483,7 @@ GameObject:
   - component: {fileID: 752448202}
   - component: {fileID: 752448204}
   - component: {fileID: 752448203}
+  - component: {fileID: 752448205}
   m_Layer: 5
   m_Name: Gear
   m_TagString: Untagged
@@ -532,6 +547,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 752448201}
   m_CullTransparentMesh: 0
+--- !u!114 &752448205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752448201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93056b3671f6dff41aa228e3e216fb95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 50
 --- !u!1 &819613226
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,6 +739,7 @@ GameObject:
   - component: {fileID: 854018814}
   - component: {fileID: 854018816}
   - component: {fileID: 854018815}
+  - component: {fileID: 854018817}
   m_Layer: 5
   m_Name: Gear (1)
   m_TagString: Untagged
@@ -774,6 +803,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854018813}
   m_CullTransparentMesh: 0
+--- !u!114 &854018817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854018813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93056b3671f6dff41aa228e3e216fb95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: -40
 --- !u!1 &1027701090
 GameObject:
   m_ObjectHideFlags: 0
