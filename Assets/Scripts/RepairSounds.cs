@@ -3,7 +3,7 @@
 public class RepairSounds : MonoBehaviour
 {
     [SerializeField] private AudioClip[] repair;
-    [SerializeField] private float timeBetweenHits = 2f;
+    [SerializeField] private float timeBetweenHits = .8f;
 
     private float _cooldownRemaining;
     private bool _isRepairing = true;
