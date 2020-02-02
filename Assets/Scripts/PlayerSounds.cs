@@ -15,7 +15,7 @@ public sealed class PlayerSounds : OnMessage<PlayerStartedWalking, PlayerStopped
 
     protected override void Execute(PlayerStartedWalking msg) => footsteps.StartWalking();
     protected override void Execute(PlayerStoppedWalking msg) => footsteps.StopWalking();
-    protected override void Execute(PlayerJumped msg) => player.PlayOneShot(jump);
+    protected override void Execute(PlayerJumped msg) => player.PlayOneShot(jump, 0.7f);
     protected override void Execute(PlayerDoubleJumped msg) => player.PlayOneShot(airJump);
     protected override void Execute(PlayerFalling msg) => uiSfx.Play(falling);
 
@@ -24,8 +24,8 @@ public sealed class PlayerSounds : OnMessage<PlayerStartedWalking, PlayerStopped
     protected override void Execute(RepairCompleted msg)
     {
         repairing.StopRepairing();
-        uiSfx.Play(objectRepaired);
+        uiSfx.Play(objectRepaired, 0.82f);
     }
 
-    protected override void Execute(MissileHitPlayer msg) => uiSfx.Play(missile, 0.5f);
+    protected override void Execute(MissileHitPlayer msg) => uiSfx.Play(missile, 0.6f);
 }
