@@ -76,23 +76,27 @@ public class GameManager : MonoBehaviour
         MainCam.transform.GetComponent<CameraController>().ChangeDir();
     }
 
-    public void KillPlayer() {
-        MainCam.GetComponent<CameraController>().enabled = false;
-        Player.SetActive(false);
-        Player.transform.position = SpawnPoint.transform.position;
+
+    public void KillPlayer(float FirstTimer = 0, float SecondTimer = 1) {
         if(!isRunning) {
             isRunning = true;
-            StartCoroutine(DeathRespawn());
+            Player.GetComponent<CharacterController>().canMove = false;
+            StartCoroutine(DeathRespawn(FirstTimer, SecondTimer));
         }
     }
 
-    IEnumerator DeathRespawn()
+    IEnumerator DeathRespawn(float FirstTimer, float SecondTimer)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(FirstTimer);
+        MainCam.GetComponent<CameraController>().enabled = false;
+        Player.SetActive(false);
+        Player.transform.position = SpawnPoint.transform.position;
+        yield return new WaitForSeconds(SecondTimer);
         MainCam.GetComponent<CameraController>().enabled = true;
         Player.SetActive(true);
         Player.GetComponent<CharacterController>().SetState(0);
         MainCam.GetComponent<CameraController>().ChangeDir();
+        Player.GetComponent<CharacterController>().canMove = true;
 
         isRunning = false;
     }

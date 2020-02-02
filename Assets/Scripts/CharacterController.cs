@@ -14,7 +14,7 @@ public class CharacterController : MonoBehaviour
 
     //References
     private Rigidbody rb;
-    private bool canMove = true;
+    public bool canMove = true;
     private int State ;         //Needs to Start at -1 so that it sets the bounds in game
 
     public List<Vector3> Bounds = new List<Vector3>();
@@ -202,7 +202,7 @@ public class CharacterController : MonoBehaviour
         if (other.name == "TopDoor" || other.name == "BottomDoor")
             inRange = true;
         if (other.CompareTag("DeathZone"))
-            GameManager.Manager.KillPlayer();
+            GameManager.Manager.KillPlayer(0.8f,2);
     }
 
     private void OnTriggerExit(Collider other) {
