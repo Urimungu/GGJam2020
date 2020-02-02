@@ -224,3 +224,4 @@ MonoBehaviour:
   uiSfx: {fileID: 11400000, guid: 67ac8d612af509048a21452576c6eac4, type: 2}
   launch: {fileID: 8300000, guid: 3326691efadc30b41b7712f0e9118561, type: 3}
   explode: {fileID: 8300000, guid: fc5098ed31478c243ae1d5026a691605, type: 3}
+  launchVolume: 0.8
