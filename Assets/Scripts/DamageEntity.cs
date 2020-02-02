@@ -22,30 +22,52 @@ public class DamageEntity : MonoBehaviour
     [Header("Decrement Value"), Range(1, 10)]
     [SerializeField] private int decrementValue = 1; //Range decrease every spawn
 
-    [Header("Decrement Limit")]
-    [SerializeField] private float decrementLimit = 1;
+    [Header("Decrement Limit"), Range(1, 10)]
+    [SerializeField] private int decrementLimit = 1;
 
-    //A bool to tell us that this script will not run
-    private bool cantExecuteScript;
+    //Have us a timer, and set duration
+    private float time
+
+    //Simulation Coroutine
+    private IEnumerator simulationRoutine;
 
     // Start is called before the first frame update
     void Start()
     {
+        simulationRoutine = SimulateTakingDamage();
+
+        if (!Concerned())
+            StartCoroutine(simulationRoutine);
+        else
+            Debug.Log("DecrementLimit must be smaller than minDurationValue. Simulation will not execute.");
 
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator SimulateTakingDamage()
     {
-
+        while (true)
+        {
+            time += Time.deltaTime;
+            
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     /// <summary>
     /// The decrementLimit can not be greater than
     /// the minimum duration range, otherwise, we would have a problem.
     /// </summary>
-    [ExecuteAlways]
-    void CheckDecrementLimit()
+    bool Concerned()
+    {
+        return (decrementLimit > minDurationValue);
+    }
+
+    void RandomizeDuration()
+    {
+
+    }
+
+    void DecrementRange()
     {
 
     }
