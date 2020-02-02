@@ -15,20 +15,24 @@ public class BrokenSpawnerManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        foreach(BrokenAreaSpawner spawner in FindObjectsOfType<BrokenAreaSpawner>())
+        #region Find all Broken Area Spawners
+        foreach (BrokenAreaSpawner spawner in FindObjectsOfType<BrokenAreaSpawner>())
             spawners.Add(spawner);
 
-        serializedSpawners = spawners;
+        serializedSpawners = new List<BrokenAreaSpawner>();
+
+        serializedSpawners = spawners; 
+        #endregion
     }
 
     public static BrokenAreaSpawner GetAreaSpawnerByIndex(int _index)
     {
         return spawners[_index];
+    }
+
+    public List<BrokenAreaSpawner> GrabAllBrokenAreaSpawners()
+    {
+        return serializedSpawners;
     }
 }

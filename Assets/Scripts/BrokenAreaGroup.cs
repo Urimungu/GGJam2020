@@ -36,6 +36,10 @@ public class BrokenAreaGroup : MonoBehaviour
     private float dividedHP;
     private bool completedFirstUpdate = false;
 
+    //Create a list so that when iterating, we add all spawners that are still reparable
+    [Header("Reparable Spawners"), SerializeField]
+    private List<BrokenAreaSpawner> reparableSpawners;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +55,7 @@ public class BrokenAreaGroup : MonoBehaviour
             //Calculate health
             if (updateCount)
             {
+                
                 CalculateTotalHealth();
                 updateCount = false;
             }
@@ -61,27 +66,27 @@ public class BrokenAreaGroup : MonoBehaviour
 
     private void CalculateTotalHealth()
     {
-        BrokenAreaSpawner[] detectedSpawners = GetComponentsInChildren<BrokenAreaSpawner>();
-        List<BrokenAreaSpawner> reparableSpawners = new List<BrokenAreaSpawner>();
+        //Get all existing spawner for us to iterate
+        BrokenAreaSpawner[] detectedSpawners = BrokenSpawnerManager.Instance.GrabAllBrokenAreaSpawners().ToArray();
+
+        reparableSpawners.Clear();
+        reparableSpawners = new List<BrokenAreaSpawner>();
 
         //Check for spawners that are not marked irreparable
-        foreach(BrokenAreaSpawner spawner in detectedSpawners)
+        foreach (BrokenAreaSpawner spawner in detectedSpawners)
         {
-            if (spawner.GetSeverityState() != BrokenAreaSpawner.SeverityState.IRREPARABLE)
+            if (spawner.GetSeverityLevelAsString() != "IRREPARABLE")
                 reparableSpawners.Add(spawner);
-
-           // Debug.Log(reparableSpawners.Count);
         }
 
         if (completedFirstUpdate == false)
         {
             dividedHP = maxHealth / detectedSpawners.Length;
             completedFirstUpdate = true;
+            Debug.Log("Fist update has ran successfully.");
         }
 
         currentHealth = reparableSpawners.Count * dividedHP;
-
-        
     }
 
     public void SignalCountUpdate()
