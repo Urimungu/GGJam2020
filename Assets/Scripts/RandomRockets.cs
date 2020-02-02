@@ -4,25 +4,60 @@ using UnityEngine;
 
 public class RandomRockets : MonoBehaviour
 {
+    //Spawn this object
+    public GameObject spawnObject;
 
-    [SerializeField] private float missileFrequency;
+    public float maxTime = 5;
+    public float minTime = 2;
+
+    //current time
+    private float time;
+
+    //The time to spawn the object
+    private float spawnTime;
+
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject missile;
     [SerializeField] private Transform target;
 
-    private void Start()
+    void Start()
     {
-        player = GameObject.Find("Player");
+        SetRandomTime();
+        time = minTime;
+        
+    }
+
+    void FixedUpdate()
+    {
+        player = GameManager.Manager.Player;
         target = player.GetComponent<Transform>();
-    }
+        //Counts up
+        time += Time.deltaTime;
 
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.X))
+        //Check if its the right time to spawn the object
+        if (time >= spawnTime)
         {
-            Instantiate(missile, target.position, target.rotation);
+            SpawnObject();
+            SetRandomTime();
         }
+
     }
 
+
+    //Spawns the object and resets the time
+    void SpawnObject()
+    {
+        time = 0f;
+        Instantiate(missile, player.transform.position, target.transform.rotation);
+    }
+
+    //Sets the random time between minTime and maxTime
+    void SetRandomTime()
+    {
+        spawnTime = Random.Range(minTime, maxTime);
+    }
 
 }
+
+
+

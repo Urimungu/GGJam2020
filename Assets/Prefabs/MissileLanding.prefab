@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3490161953618124594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.615633, y: 1.3867188, z: -6.511}
-  m_LocalScale: {x: 5.340959, y: 5.340959, z: 5.340959}
+  m_LocalPosition: {x: 0, y: -0.68, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -90,8 +90,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.5110221
+  m_Center: {x: 0, y: 0.0026186705, z: 0}
 --- !u!114 &9054033804614794310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,6 +104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c2eef4e6876f9c4ca3796a6587cdbf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 2.5
   player: {fileID: 0}
+  rocket: {fileID: 8190208971750573983, guid: 9f5907f270e18de428cfe39dc0fccc6d, type: 3}
   explosion: {fileID: 8424001588550508248, guid: 74ff742b558402a4a8671d5e912cf0ad,
     type: 3}
+  cameraAnim: {fileID: 0}
