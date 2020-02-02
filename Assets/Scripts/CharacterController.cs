@@ -36,9 +36,17 @@ public class CharacterController : MonoBehaviour
     //Initializes the Player
     void Start(){
         rb = GetComponent<Rigidbody>();
+        anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+
+        if (GameManager.Manager == null)
+            return;
+
+        //If the Bounds don't exist yet
+        if(Bounds.Count == 0 && GameManager.Manager.TopBounds.Count == 0)
+            Bounds = new List<Vector3> { new Vector3(-100, 0, 0), new Vector3(100, 0, 0), new Vector3(100, 0, 100), new Vector3(-100, 0, 100) };
+
         GameManager.Manager.Player = gameObject;
         rocketFire = transform.GetChild(1).GetComponent<ParticleSystem>();
-        anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
     }
 
 
