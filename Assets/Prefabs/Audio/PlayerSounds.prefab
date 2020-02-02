@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3644897091991350318}
   - component: {fileID: 130760576612040550}
   - component: {fileID: 6778056363228325961}
+  - component: {fileID: 7361559544867497957}
   m_Layer: 0
   m_Name: PlayerSounds
   m_TagString: Untagged
@@ -154,6 +155,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 811793a3710b40043b67668fbb94d85a, type: 3}
   timeBetweenSteps: 0.5
   startWalkingOnAwake: 0
+  delayBeforeCanWalk: 1.5
 --- !u!114 &6778056363228325961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +171,25 @@ MonoBehaviour:
   uiSfx: {fileID: 11400000, guid: 67ac8d612af509048a21452576c6eac4, type: 2}
   player: {fileID: 3644897091991350318}
   footsteps: {fileID: 130760576612040550}
+  repairing: {fileID: 7361559544867497957}
   jump: {fileID: 8300000, guid: 0167c7d72749f0441a875bc6a3fc6b0a, type: 3}
   airJump: {fileID: 8300000, guid: 4ddb86c1c75b1f24a9b8d108caf30060, type: 3}
   falling: {fileID: 8300000, guid: 975e66b0ac4a66240bd68f72fb6a4e5a, type: 3}
+  objectRepaired: {fileID: 8300000, guid: 67fc6b48b78269f4581e259c9ae5736e, type: 3}
+--- !u!114 &7361559544867497957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3059000432478759317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d4db9692c030bd4dab45fd6e14aebd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  repair:
+  - {fileID: 8300000, guid: 38f6265bcffdae54b850581335cc7abb, type: 3}
+  - {fileID: 8300000, guid: 5be5c6eb4a64b7f4d8480b0a31b5a8a6, type: 3}
+  - {fileID: 8300000, guid: e9862c2bc9d710d4bbbe78c4a5f1a0c5, type: 3}
+  timeBetweenHits: 0.8
