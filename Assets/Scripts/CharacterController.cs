@@ -71,6 +71,10 @@ public class CharacterController : MonoBehaviour
         if(Mathf.Abs(new Vector2(rb.velocity.x, rb.velocity.z).magnitude) > 0.1f)
             transform.GetChild(0).rotation =
             Quaternion.LookRotation(new Vector3(rb.velocity.x, 0, rb.velocity.z), Vector3.up);
+
+        //Kills himself button
+        if(Input.GetKeyDown(KeyCode.R))
+            GameManager.Manager.KillPlayer(0, 1);
     }
 
     private void UpdateSpeed()
