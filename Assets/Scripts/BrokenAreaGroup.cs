@@ -93,4 +93,9 @@ public class BrokenAreaGroup : MonoBehaviour
     {
         updateCount = true;
     }
+
+    public float GetHealth()
+    {
+        return currentHealth;
+    }
 }
