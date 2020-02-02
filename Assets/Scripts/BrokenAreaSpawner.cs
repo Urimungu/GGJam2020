@@ -124,7 +124,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            BrokenSpawnerManager.GetAreaSpawnerByIndex(0).SetDamage(10);
+            BrokenSpawnerManager.GetAreaSpawnerByIndex(0).SetDamage(1);
     }
 
     /// <summary>
@@ -158,53 +158,53 @@ public class BrokenAreaSpawner : MonoBehaviour
     /// <returns></returns>
     private IEnumerator IncrementRepairProgress()
     {
-        if (severityState != SeverityState.IRREPARABLE)
+        #region Wait Each Frame
+
+        while (true)
         {
-            #region Wait Each Frame
-
-            while (true)
+            if (CheckMouseCollision() && hit.collider.tag == "BrokenArea")
             {
-                if (CheckMouseCollision() && hit.collider.tag == "BrokenArea")
+                BrokenArea effectedArea = hit.collider.gameObject.GetComponent<BrokenArea>();
+
+                float increment = effectedArea.GetRepairIncrement();
+
+                effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
+
+                effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
+
+
+                //Update textUI
+                UIManager.Instance.SetAreaTextInfo(effectedArea.GetGeneralArea() + " (" +
+                                                   effectedArea.GetSeverity() +
+                                                   ")");
+                UIManager.Instance.SetProgressionInfo(effectedArea.GetRepairProgress(true));
+
+                if (Input.GetMouseButton(0))
                 {
-                    BrokenArea effectedArea = hit.collider.gameObject.GetComponent<BrokenArea>();
-
-                    float increment = effectedArea.GetRepairIncrement();
-
-                    effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
-
-                    effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
-
-
-                    //Update textUI
-                    UIManager.Instance.SetAreaTextInfo(effectedArea.GetGeneralArea() + " (" +
-                                                       effectedArea.GetSeverity() +
-                                                       ")");
-                    UIManager.Instance.SetProgressionInfo(effectedArea.GetRepairProgress(true));
-
-                    if (Input.GetMouseButton(0))
+                    switch (effectedArea.GetIsInteractable())
                     {
-                        switch (effectedArea.GetIsInteractable())
-                        {
-                            case false:
+                        case false:
+                            if (effectedArea.GetSpawnerOrigin().severityState != SeverityState.IRREPARABLE)
                                 effectedArea.GetSpawnerOrigin().SendAlert(1);
-                                break;
-                            case true:
-                                UpdateIsRepairing(Input.GetMouseButton(0));
-                                effectedArea.IncrementRepairProgressValue(increment);
-                                effectedArea.GetSpawnerOrigin().SendAlert(reset);
-                                break;
-                        }
+                            else
+                                effectedArea.GetSpawnerOrigin().SendAlert(2);
+                            break;
+                        case true:
+                            UpdateIsRepairing(Input.GetMouseButton(0));
+                            effectedArea.IncrementRepairProgressValue(increment);
+                            effectedArea.GetSpawnerOrigin().SendAlert(reset);
+                            break;
                     }
                 }
-                else
-                {
-                    UpdateIsRepairing(false);
-                    UIManager.Instance.SetAreaTextInfo("???");
-                    UIManager.Instance.SetProgressionInfo((float)reset);
-                }
-
-                yield return new WaitForEndOfFrame();
             }
+            else
+            {
+                UpdateIsRepairing(false);
+                UIManager.Instance.SetAreaTextInfo("???");
+                UIManager.Instance.SetProgressionInfo((float)reset);
+            }
+
+            yield return new WaitForEndOfFrame();
             #endregion
         }
     }
