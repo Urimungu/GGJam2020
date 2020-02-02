@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     //References
-    public Text Options;
+    public TextMeshProUGUI Options;
     
     //Variables
     private int State = 0;
