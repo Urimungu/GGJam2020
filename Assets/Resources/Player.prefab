@@ -94,6 +94,8 @@ MonoBehaviour:
   doubleJumpForce: 10
   gravity: 0.7
   rayCastLength: 0.4
+  explosion: {fileID: 8424001588550508248, guid: 74ff742b558402a4a8671d5e912cf0ad,
+    type: 3}
   canMove: 1
   Bounds: []
   rocketFire: {fileID: 3816519319797829261}
