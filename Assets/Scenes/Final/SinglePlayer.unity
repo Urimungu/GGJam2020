@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2591,7 +2591,7 @@ GameObject:
   m_Component:
   - component: {fileID: 519650132}
   - component: {fileID: 519650131}
-  - component: {fileID: 519650130}
+  - component: {fileID: 519650133}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2599,14 +2599,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &519650130
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519650129}
-  m_Enabled: 1
 --- !u!20 &519650131
 Camera:
   m_ObjectHideFlags: 0
@@ -2616,7 +2608,7 @@ Camera:
   m_GameObject: {fileID: 519650129}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
@@ -2663,6 +2655,15 @@ Transform:
   m_Father: {fileID: 7871236}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!45 &519650133
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519650129}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 579a5b5d592b03647ae61ccd3b43c9cc, type: 2}
 --- !u!1 &554435257
 GameObject:
   m_ObjectHideFlags: 0
@@ -7942,6 +7943,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 690257575}
     m_Modifications:
+    - target: {fileID: 100036, guid: 2c0bd4e13c8028d42a78762b6c35bf46, type: 3}
+      propertyPath: m_Name
+      value: Robot
+      objectReference: {fileID: 0}
     - target: {fileID: 400036, guid: 2c0bd4e13c8028d42a78762b6c35bf46, type: 3}
       propertyPath: m_LocalPosition.x
       value: -211.6
@@ -7985,10 +7990,6 @@ PrefabInstance:
     - target: {fileID: 400036, guid: 2c0bd4e13c8028d42a78762b6c35bf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100036, guid: 2c0bd4e13c8028d42a78762b6c35bf46, type: 3}
-      propertyPath: m_Name
-      value: Robot
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c0bd4e13c8028d42a78762b6c35bf46, type: 3}
