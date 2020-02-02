@@ -7495,7 +7495,7 @@ MonoBehaviour:
   minDamageValue: 100
   maxDamageValue: 100
   decrementValue: 1
-  decrementLimit: 1
+  decrementLimit: 0.25
 --- !u!1001 &1564923743
 PrefabInstance:
   m_ObjectHideFlags: 0
