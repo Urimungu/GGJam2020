@@ -189,6 +189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 39654858}
   - component: {fileID: 39654859}
+  - component: {fileID: 39654860}
   m_Layer: 0
   m_Name: UpperBodyAreaSpawner
   m_TagString: Untagged
@@ -253,6 +254,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   irreparable: 0
+--- !u!114 &39654860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39654857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57be40a6dbbbf474da175daa4210ce0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comments: 'Broken Area Group takes in the full hp of the whole robot. This is automatically
+    calculated by CalculateTotalHealth(). (Tyrease Teer; Feb 2nd, 2019; 5:35am)
+
+
+'
 --- !u!1001 &82298774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4948,6 +4966,7 @@ GameObject:
   m_Component:
   - component: {fileID: 891194594}
   - component: {fileID: 891194593}
+  - component: {fileID: 891194595}
   m_Layer: 0
   m_Name: BrokenSpawnerManager
   m_TagString: Untagged
@@ -4982,6 +5001,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &891194595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891194592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57be40a6dbbbf474da175daa4210ce0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comments: 'Keeps trach of all existing broken area spawners.
+
+    With this, programmers are able to access whatever spawner from this component.
+    (Tyrease Teer; Feb 2, 2019; 5:24am)'
 --- !u!1001 &896937195
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7902,6 +7937,7 @@ GameObject:
   - component: {fileID: 1606810504}
   - component: {fileID: 1606810503}
   - component: {fileID: 1606810502}
+  - component: {fileID: 1606810506}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -7974,6 +8010,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1606810506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606810501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57be40a6dbbbf474da175daa4210ce0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comments: 'Responsible for All UI in the game.
+
+    Score.cs and Timer.cs are necessary in order for UI updating to work (Tyrease
+    Teer; Feb 2, 2019; 5:33am)'
 --- !u!1001 &1615129886
 PrefabInstance:
   m_ObjectHideFlags: 0
