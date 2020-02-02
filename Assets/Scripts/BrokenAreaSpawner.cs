@@ -135,6 +135,7 @@ public class BrokenAreaSpawner : MonoBehaviour
     {
         //Change the severity of an area.
         severityState = (SeverityState)_value;
+        
     }
 
     /// <summary>
@@ -147,6 +148,7 @@ public class BrokenAreaSpawner : MonoBehaviour
         while (true)
         {
             ChangeSeverityState(brokenAreaInstances.Count);
+            SignalGroup();
             yield return new WaitForEndOfFrame();
         }
         #endregion
@@ -172,11 +174,8 @@ public class BrokenAreaSpawner : MonoBehaviour
 
                 effectedArea.SetIsGettingFixed(Input.GetMouseButton(0));
 
-
                 //Update textUI
-                UIManager.Instance.SetAreaTextInfo(effectedArea.GetGeneralArea() + " (" +
-                                                   effectedArea.GetSeverity() +
-                                                   ")");
+                UIManager.Instance.SetAreaTextInfo(effectedArea.GetGeneralArea() + " (" + effectedArea.GetSeverity() + ")");
                 UIManager.Instance.SetProgressionInfo(effectedArea.GetRepairProgress(true));
 
                 if (Input.GetMouseButton(0))
@@ -290,6 +289,25 @@ public class BrokenAreaSpawner : MonoBehaviour
     }
 
     /// <summary>
+    /// Signals to spawner's repective group on all spawner status.
+    /// </summary>
+    private void SignalGroup()
+    {
+        #region Send Signal to Group
+        try
+        {
+            BrokenAreaGroup hi = GetComponentInParent<BrokenAreaGroup>();
+            if (hi != null)
+                hi.SignalCountUpdate();
+        }
+        catch
+        {
+            throw new AbandonedMutexException();
+        }
+        #endregion
+    }
+
+    /// <summary>
     /// Generate a random location relative to spawner
     /// </summary>
     private void RandomizeAndSpawnBrokenArea()
@@ -341,19 +359,6 @@ public class BrokenAreaSpawner : MonoBehaviour
 
             //Refresh list
             InstanceListRefresh();
-
-            #region Send Signal to Group
-            try
-            {
-                BrokenAreaGroup hi = GetComponentInParent<BrokenAreaGroup>();
-                if (hi != null)
-                    hi.SignalCountUpdate();
-            }
-            catch
-            {
-                throw new AbandonedMutexException();
-            }
-            #endregion
         }
     }
 

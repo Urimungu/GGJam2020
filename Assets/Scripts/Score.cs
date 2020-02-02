@@ -89,30 +89,20 @@ public class Score : MonoBehaviour
 
     #endregion
 
-    #region Set Methods
-    public void SetEnemyScore(int _value)
+    #region Get Methods
+    public long GetCurrentScore()
     {
-
+        return currentScore;
     }
 
-    public void SetRepairScore(int _value)
+    public long GetCurrentHighScore()
     {
-
+        return currentHighScore;
     }
 
-    public void SetMuliplier(int _value)
+    public List<long> GetHighScoreList()
     {
-
-    }
-
-    public void SetIncrementValue()
-    {
-
-    }
-
-    public void SetIntervalValue()
-    {
-
+        return highScores;
     } 
     #endregion
 }
