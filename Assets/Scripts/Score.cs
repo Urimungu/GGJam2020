@@ -39,6 +39,7 @@ public class Score : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        DontDestroyOnLoad(Instance);
     }
 
     // Start is called before the first frame update

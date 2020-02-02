@@ -15,12 +15,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: 01 - Default
-    second: {fileID: 2100000, guid: fcff8f4054c946c418c4a8df728ff685, type: 2}
+    second: {fileID: 2100000, guid: 4657613b9a8d0d140971fdc4085cd420, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: 02 - Default
-    second: {fileID: 2100000, guid: 1b6ab018f20a72f4fb3e4ca36d2af564, type: 2}
+    second: {fileID: 2100000, guid: d0ca59ef66018ef419dce4fb0ea85f69, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
