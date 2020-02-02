@@ -19,7 +19,7 @@ public class BrokenSpawnerManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-
+        
         #region Find all Broken Area Spawners
         foreach (BrokenAreaSpawner spawner in FindObjectsOfType<BrokenAreaSpawner>())
             spawners.Add(spawner);
