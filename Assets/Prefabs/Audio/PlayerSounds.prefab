@@ -170,3 +170,4 @@ MonoBehaviour:
   footsteps: {fileID: 130760576612040550}
   jump: {fileID: 8300000, guid: 0167c7d72749f0441a875bc6a3fc6b0a, type: 3}
   airJump: {fileID: 8300000, guid: 4ddb86c1c75b1f24a9b8d108caf30060, type: 3}
+  falling: {fileID: 8300000, guid: d7aac1b45374a954aa8236edc7b3816c, type: 3}
