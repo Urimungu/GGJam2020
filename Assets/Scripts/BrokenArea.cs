@@ -50,6 +50,8 @@ public class BrokenArea : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+
         //Get the spawner that this object came from
         spawnerObj = GetSpawnerOrigin();
         spawnerName = spawnerObj.GetSpawnerName();
@@ -93,12 +95,18 @@ public class BrokenArea : MonoBehaviour
         #region Wait Each Frame
         while (true)
         {
+            #region Assure that player is not null
+            while (player == null)
+            {
+                player = GameObject.FindGameObjectWithTag("Player");
+                yield return new WaitForEndOfFrame();
+            } 
+            #endregion
+
             Vector3 distance = Vector3.zero;
 
             //Calculate distance of player
-            var dist = Vector3.Distance(transform.position, player.transform.position);
-
-            gdistance = dist;
+            float dist = Vector3.Distance(transform.position, player.transform.position);
 
             var reparable = (spawnerObj.GetSeverityState() != BrokenAreaSpawner.SeverityState.IRREPARABLE);
 
