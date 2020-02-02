@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class DamageEntity : MonoBehaviour
 {
@@ -27,9 +27,13 @@ public class DamageEntity : MonoBehaviour
 
     //Have us a timer, and set duration
     private float time;
+    private int setDuration;
 
     //Simulation Coroutine
     private IEnumerator simulationRoutine;
+
+    //Reset constant
+    private const uint reset = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +52,24 @@ public class DamageEntity : MonoBehaviour
         while (true)
         {
             time += Time.deltaTime;
-            
+            if (time > setDuration)
+            {
+                Debug.Log("Applying Damage....");
+
+                time = reset;
+
+                //Get a random brokenSpawner, and apply damage;
+                int randomSpawnerValue =
+                    Random.Range((int)reset, BrokenSpawnerManager.Instance.GrabAllBrokenAreaSpawners().Count);
+
+                //Get random damage amount
+                int randomDamageValue = Random.Range((int) reset, 10);
+
+                BrokenSpawnerManager.GetAreaSpawnerByIndex(randomSpawnerValue).SetDamage(randomDamageValue);
+
+                DecrementRange();
+                RandomizeDuration();
+            }
             yield return new WaitForEndOfFrame();
         }
     }
@@ -64,11 +85,16 @@ public class DamageEntity : MonoBehaviour
 
     void RandomizeDuration()
     {
-
+        setDuration = Random.Range(minDurationValue, maxDurationValue);
+        Debug.Log("Duration now set to: " + setDuration);
     }
 
     void DecrementRange()
     {
-
+        if (minDurationValue > decrementLimit)
+        {
+            minDurationValue -= decrementLimit;
+            maxDurationValue -= decrementLimit;
+        }
     }
 }

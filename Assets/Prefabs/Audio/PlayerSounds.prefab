@@ -176,6 +176,7 @@ MonoBehaviour:
   airJump: {fileID: 8300000, guid: 4ddb86c1c75b1f24a9b8d108caf30060, type: 3}
   falling: {fileID: 8300000, guid: 975e66b0ac4a66240bd68f72fb6a4e5a, type: 3}
   objectRepaired: {fileID: 8300000, guid: 67fc6b48b78269f4581e259c9ae5736e, type: 3}
+  missile: {fileID: 8300000, guid: dd92437867553f84c98d4e39b870419a, type: 3}
 --- !u!114 &7361559544867497957
 MonoBehaviour:
   m_ObjectHideFlags: 0
