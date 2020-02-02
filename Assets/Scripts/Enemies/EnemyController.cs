@@ -8,10 +8,14 @@ public class EnemyController : MonoBehaviour
     public float Health;
     public float PitLength = 4.2f;  //Distance of Gap he can Jump
     public float JumpToDistance;
+    public float FallDistance = 4;
 
     public float DeathOnNonMatch = 6;
     public bool DeathComing;  //Kills the enemy if the bool isn't reset in time
     private float Horizontal;
+
+    private Vector3 RightDirection;
+    private int oldState = 4;
 
     //References
     private Transform Player;
@@ -26,39 +30,57 @@ public class EnemyController : MonoBehaviour
             Player = GameManager.Manager.Player.transform;
 
         //Controls the Enemy
+        Move = GetComponent<EnemyMovement>();
         Move.ControlTheEnemy(Movement(), DecideJump());
+
+        if (oldState != Move.State) {
+            RightDirection = Move.Direction();
+            oldState = Move.State;
+            print("Ran");
+        }
+
     }
 
     private float Movement() {
+        float distance = (new Vector2(transform.position.x, transform.position.z) - new Vector2(Player.transform.position.x, Player.transform.position.z)).magnitude;
+        float heightDist = Player.position.y - transform.position.y;
+        if(distance > 0.3f) {
+            return 1;
+        }
 
+        if(distance < -0.3f){
+            return -1;
+        }
         return 0;
     }
 
     private bool DecideJump() {
         //Positive (Moves Right)
-        if(Horizontal > 0) {
+        RaycastHit hit, hit2;
+        bool hit1Hit = false, hit2Hit = false;
+        Vector3 spawn = (transform.position + GetComponent<CapsuleCollider>().center);
 
+        //Shoots the Raycasts
+        hit1Hit = Physics.Raycast(spawn + (RightDirection * 0.5f), Vector3.down, out hit, 5, Move.layerMask);
+        hit2Hit = Physics.Raycast(spawn + (RightDirection * PitLength), Vector3.down, out hit2, 5, Move.layerMask);
 
-        } else if (Horizontal < 0) {
+        print(hit1Hit);
+        print(hit2Hit);
 
+        //Should Jump
+        if (!hit1Hit && hit2Hit) {
+            print("Worked");
+            return true;
 
         }
+
+        Debug.DrawRay(spawn + (RightDirection * PitLength), Vector3.down, Color.red);
+        Debug.DrawRay(spawn + (RightDirection * 0.5f), Vector3.down, Color.red);
         return false;
     }
 
     IEnumerator DeathTimer() {
         yield return new WaitForSeconds(DeathOnNonMatch);
-
-
-    }
-    private void ChasePlayer() {
-
-
-    }
-
-
-    //Pools the Object
-    public void Death() {
 
 
     }
@@ -72,11 +94,19 @@ public class EnemyController : MonoBehaviour
 
     public void KillEnemy() {
         //If there is no SpawnManager then Destroy this
-        if(transform.parent.GetComponent<EnemySpawner>() == null)
+        if (transform.parent == null || transform.parent.GetComponent<EnemySpawner>() == null) {
             Destroy(gameObject);
+            return;
+        }
 
         //Returns the Enemy to the Spawn Manager
         transform.parent.GetComponent<EnemySpawner>().PoolEnemy(gameObject);
 
+    }
+
+    //Death on Fall
+    void OnTriggerEnter(Collider other) {
+        if(other.gameObject.CompareTag("DeathZone"))
+            KillEnemy();
     }
 }

@@ -33,12 +33,13 @@ public class Score : MonoBehaviour
     [Header("Multiplier"), SerializeField] private int muliplier = 1;
 
     //Score System Coroutine.
-    private IEnumerator scoreSystemRoutine;
-    private IEnumerator incrementorRoutine;
+    public IEnumerator scoreSystemRoutine;
+    public IEnumerator incrementorRoutine;
 
     void Awake()
     {
         Instance = this;
+        DontDestroyOnLoad(Instance);
     }
 
     // Start is called before the first frame update
@@ -57,12 +58,16 @@ public class Score : MonoBehaviour
     {
         while (true)
         {
-            //Make sure high score updates if current score surpasses
-            if (currentScore > currentHighScore)
-                currentHighScore = currentScore;
+            if (BrokenSpawnerManager.Instance.brokenAreaGroup.GetHealth() > 0)
+            {
+                //Make sure high score updates if current score surpasses
+                if (currentScore > currentHighScore)
+                    currentHighScore = currentScore;
 
-            UIManager.Instance.SetScoreText(currentScore.ToString("0000000", CultureInfo.InvariantCulture));
-            UIManager.Instance.SetHighScoreText(currentHighScore.ToString("0000000", CultureInfo.InvariantCulture));
+                UIManager.Instance.SetScoreText(currentScore.ToString("0000000", CultureInfo.InvariantCulture));
+                UIManager.Instance.SetHighScoreText(currentHighScore.ToString("0000000", CultureInfo.InvariantCulture));
+            }
+
             yield return new WaitForEndOfFrame();
         }
     }
@@ -71,7 +76,10 @@ public class Score : MonoBehaviour
     {
         while (true)
         {
-            currentScore += incrementValue * muliplier;
+            if (BrokenSpawnerManager.Instance.brokenAreaGroup.GetHealth() > 0)
+            {
+                currentScore += incrementValue * muliplier; 
+            }
             yield return new WaitForSeconds(_value);
         }
     }

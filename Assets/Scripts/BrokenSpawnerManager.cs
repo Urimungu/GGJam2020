@@ -19,7 +19,7 @@ public class BrokenSpawnerManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-
+        
         #region Find all Broken Area Spawners
         foreach (BrokenAreaSpawner spawner in FindObjectsOfType<BrokenAreaSpawner>())
             spawners.Add(spawner);
@@ -50,7 +50,7 @@ public class BrokenSpawnerManager : MonoBehaviour
     {
         while (true)
         {
-            if(brokenAreaGroup.GetHealth() <= 0)
+            if (brokenAreaGroup.GetHealth() <= 0)
                 GameManager.Manager.LoseSinglePlayer();
 
             yield return new WaitForEndOfFrame();
