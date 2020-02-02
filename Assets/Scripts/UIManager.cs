@@ -53,22 +53,22 @@ public class UIManager : MonoBehaviour
 
     public void SetScoreText(string _value)
     {
-        T_SCORE.text = _value;
+        T_SCORE.text = "Score:" + _value;
     }
 
     public void SetTimerText(string _value)
     {
-        T_TIMER.text = "TIMER:\n" + _value;
+        T_TIMER.text = "Timer:\n" + _value;
     }
 
     public void SetTimerText(float _minutes, float _seconds)
     {
-        T_TIMER.text = "TIMER:\n" + _minutes + ":" + _seconds.ToString("00.00", CultureInfo.InvariantCulture);
+        T_TIMER.text = "Timer:\n" + _minutes + ":" + _seconds.ToString("00.00", CultureInfo.InvariantCulture);
     }
 
     public void SetHighScoreText(string _value)
     {
-        T_HIGHSCORE.text = _value;
+        T_HIGHSCORE.text = "Highscore:" + _value;
     }
     #endregion
 
