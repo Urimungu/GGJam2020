@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class MissileSound : OnMessage<MissileLaunched,MissileDetonated>
+public class MissileSound : OnMessage<MissileDetonated>
 {
+    [SerializeField] private UiSfxPlayer uiSfx;
     [SerializeField] private AudioClip launch;
     [SerializeField] private AudioClip explode;
    
     private AudioSource audioSource;
 
-    protected override void Execute(MissileLaunched msg) => audioSource.PlayOneShot(launch);
-    protected override void Execute(MissileDetonated msg) => audioSource.PlayOneShot(explode);
+
+    protected override void Execute(MissileDetonated msg) => uiSfx.Play(explode);
     void Awake() => audioSource = GetComponent<AudioSource>();
-    
+    private void Start()
+    {
+            audioSource.PlayOneShot(launch);
+}
+
 }
