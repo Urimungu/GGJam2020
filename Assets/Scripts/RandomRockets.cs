@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class RandomRockets : MonoBehaviour
 {
-    //Spawn this object
-    public GameObject spawnObject;
-
     public float maxTime = 5;
     public float minTime = 2;
 

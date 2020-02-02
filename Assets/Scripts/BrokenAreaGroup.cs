@@ -70,7 +70,7 @@ public class BrokenAreaGroup : MonoBehaviour
             if (spawner.GetSeverityState() != BrokenAreaSpawner.SeverityState.IRREPARABLE)
                 reparableSpawners.Add(spawner);
 
-            Debug.Log(reparableSpawners.Count);
+           // Debug.Log(reparableSpawners.Count);
         }
 
         if (completedFirstUpdate == false)

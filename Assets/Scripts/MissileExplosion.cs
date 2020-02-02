@@ -16,7 +16,7 @@ public class MissileExplosion : MonoBehaviour
     {
         player = GameManager.Manager.Player;
         inRange = false;
-        Instantiate(rocket, transform.position, Quaternion.LookRotation(GameObject.FindGameObjectWithTag("MainCamera").transform.position - transform.position));
+       // Instantiate(rocket, transform.position, Quaternion.LookRotation(GameObject.FindGameObjectWithTag("MainCamera").transform.position - transform.position));
     }
 
     private void Start()
@@ -25,8 +25,7 @@ public class MissileExplosion : MonoBehaviour
         createTime = Time.time;
     }
     private void Update()
-    {
-        
+    {    
         if ((Time.time - createTime) > timer)
         {
             //if player is not
@@ -37,7 +36,7 @@ public class MissileExplosion : MonoBehaviour
             //if player is in explosion radius, die
             if (inRange)
             {
-                Destroy(player);
+                GameManager.Manager.KillPlayer();
             }
         }
     }
@@ -46,7 +45,7 @@ public class MissileExplosion : MonoBehaviour
     //entering explosion radius
     private void OnTriggerStay(Collider other)
     {
-        if (other.name == "Player")
+        if (other.name == "Player(Clone)")
         {
             inRange = true;
 
@@ -57,7 +56,7 @@ public class MissileExplosion : MonoBehaviour
     //Leaving explosion radius
     private void OnTriggerExit(Collider other)
     {
-        if (other.name == "Player")
+        if (other.name == "Player(Clone)")
         {
             inRange = false;
         }
