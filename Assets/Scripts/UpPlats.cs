@@ -11,31 +11,32 @@ public class UpPlats : MonoBehaviour
 
     public float speed = 4.0f;
 
-    // Start is called before the first frame update
-    void Start()
+    private float yLoc;
+
+    void Awake()
     {
+        yLoc = transform.position.y;
         up = transform.position + Vector3.up * distance;
         down = transform.position - (Vector3.up * distance);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (movingUp)
         {
-            transform.position = Vector3.Slerp(transform.position, up, Time.deltaTime * speed);
+            transform.position = Vector3.Lerp(transform.position, up, Time.deltaTime * speed);
         }
         else if (!movingUp)
         {
-            transform.position = Vector3.Slerp(transform.position, down, Time.deltaTime * speed);
+            transform.position = Vector3.Lerp(transform.position, down, Time.deltaTime * speed);
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("GoDown"))
+        if (transform.position.y >= yLoc + 1.9f)
             movingUp = false;
-        else if (other.CompareTag("GoUp"))
+        if (transform.position.y <= yLoc - 1.9f)
             movingUp = true;
+
+        print(transform.position.y);
+        print(yLoc);
     }
 }
