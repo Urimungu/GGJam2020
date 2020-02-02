@@ -28,6 +28,7 @@ public class MissileExplosion : MonoBehaviour
     {    
         if ((Time.time - createTime) > timer)
         {
+            Message.Publish(new MissileDetonated());
             //if player is not
             Message.Publish(new MissileMissedPlayer());
             Instantiate(explosion, transform.position, Quaternion.LookRotation(GameObject.FindGameObjectWithTag("MainCamera").transform.position - transform.position));
