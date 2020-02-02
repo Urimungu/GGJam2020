@@ -27,5 +27,5 @@ public sealed class PlayerSounds : OnMessage<PlayerStartedWalking, PlayerStopped
         uiSfx.Play(objectRepaired);
     }
 
-    protected override void Execute(MissileHitPlayer msg) => player.PlayOneShot(missile);
+    protected override void Execute(MissileHitPlayer msg) => uiSfx.Play(missile);
 }
